@@ -2,2657 +2,551 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LEX IQ — India's Premier Legal Quiz Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
-<script async src="https://accounts.google.com/gsi/client" onload="initGoogleSignIn()"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LEX IQ — Master the Indian Constitution</title>
+<meta name="description" content="India's premier legal quiz platform. Test your knowledge of the Indian Constitution."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<script async src="https://accounts.google.com/gsi/client" onload="initGSI()"></script>
 <style>
-/* ============================================================
-LEX IQ — GLOBAL CSS VARIABLES & RESET
-============================================================ */
-:root {
---royal:    #0B3D91;
---gold:     #FFC857;
---navy:     #2E3A59;
---royal-light: #1a52c4;
---gold-dark:#e6a800;
---white:    #FFFFFF;
---off-white:#F4F6FB;
---text-dark:#0d1b3e;
---text-muted:#7a8ab0;
---glass:    rgba(11,61,145,0.12);
---shadow-card: 0 8px 40px rgba(11,61,145,0.18);
---radius:   16px;
---radius-lg:28px;
---font-display: 'Playfair Display', serif;
---font-body:    'DM Sans', sans-serif;
---font-accent:  'Bebas Neue', cursive;
---transition:   0.35s cubic-bezier(0.4,0,0.2,1);
+:root{
+  --bg:#07090F;--surf:#0C1018;--card:#101520;--card2:#141B27;
+  --bdr:rgba(201,164,74,.15);--bdr2:rgba(201,164,74,.4);
+  --royal:#1C3FA8;--royal2:#2952D4;
+  --gold:#C9A44A;--gold2:#E5C76B;--goldd:rgba(201,164,74,.1);
+  --tx:#EDE7D4;--tx2:#9AA3B8;--tx3:#4A5470;
+  --ok:#22C55E;--er:#EF4444;
+  --r:16px;--rlg:24px;
+  --sh:0 24px 64px rgba(0,0,0,.6);
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-font-family: var(--font-body);
-background: var(--off-white);
-color: var(--text-dark);
-overflow-x: hidden;
-line-height: 1.6;
-}
-a { text-decoration: none; color: inherit; }
-img { max-width: 100%; }
-button { cursor: pointer; font-family: var(--font-body); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;background:none;}
+img{max-width:100%;display:block;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--surf);}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px;}
 
-/* ── SCROLLBAR ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--navy); }
-::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;display:flex;align-items:center;padding:0 48px;background:rgba(7,9,15,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);transition:box-shadow .3s;}
+#nav.scrolled{box-shadow:0 4px 40px rgba(0,0,0,.5);}
+.n-logo{display:flex;align-items:center;gap:11px;font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold);letter-spacing:-.5px;}
+.n-badge{width:34px;height:34px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:.95rem;color:var(--bg);box-shadow:0 4px 16px rgba(201,164,74,.4);}
+.n-links{display:flex;align-items:center;gap:4px;margin-left:auto;list-style:none;}
+.n-links a{color:var(--tx2);font-size:.85rem;font-weight:500;padding:7px 15px;border-radius:30px;transition:.2s;}
+.n-links a:hover{color:var(--gold);background:var(--goldd);}
+#n-auth{margin-left:16px;display:flex;align-items:center;gap:10px;}
+#btn-snav{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:.85rem;padding:9px 22px;border-radius:30px;transition:.25s;box-shadow:0 4px 16px rgba(201,164,74,.3);}
+#btn-snav:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,164,74,.45);}
+#n-user{display:none;align-items:center;gap:10px;}
+#n-avatar{width:34px;height:34px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;cursor:pointer;transition:.2s;}
+#n-avatar:hover{box-shadow:0 0 0 3px rgba(201,164,74,.3);}
+#n-name{font-size:.85rem;font-weight:600;cursor:pointer;}
 
-/* ============================================================
-NAVBAR
-============================================================ */
-#lexiq-nav {
-position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-height: 70px;
-background: rgba(11,61,145,0.92);
-backdrop-filter: blur(18px);
--webkit-backdrop-filter: blur(18px);
-border-bottom: 1.5px solid rgba(255,200,87,0.18);
-display: flex; align-items: center;
-padding: 0 40px;
-transition: box-shadow var(--transition);
-}
-#lexiq-nav.scrolled {
-box-shadow: 0 4px 32px rgba(11,61,145,0.45);
-}
-.nav-logo {
-display: flex; align-items: center; gap: 10px;
-font-family: var(--font-display);
-font-size: 1.7rem; font-weight: 900;
-color: var(--gold);
-letter-spacing: -1px;
-}
-.nav-logo .logo-badge {
-width: 38px; height: 38px;
-background: var(--gold);
-border-radius: 10px;
-display: flex; align-items: center; justify-content: center;
-font-family: var(--font-accent);
-font-size: 1.1rem; color: var(--royal);
-box-shadow: 0 2px 12px rgba(255,200,87,0.4);
-}
-.nav-links {
-display: flex; align-items: center; gap: 6px;
-margin-left: auto; list-style: none;
-}
-.nav-links li a {
-color: rgba(255,255,255,0.8);
-font-size: 0.88rem; font-weight: 500;
-padding: 7px 16px; border-radius: 30px;
-transition: var(--transition);
-letter-spacing: 0.3px;
-}
-.nav-links li a:hover {
-color: var(--gold);
-background: rgba(255,200,87,0.1);
-}
-#nav-user-area {
-margin-left: 20px; display: flex; align-items: center; gap: 12px;
-}
-.btn-signin-nav {
-background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-color: var(--royal) !important;
-font-weight: 700 !important;
-padding: 9px 22px !important;
-border-radius: 30px !important;
-border: none;
-font-size: 0.88rem;
-transition: var(--transition);
-box-shadow: 0 2px 14px rgba(255,200,87,0.35);
-}
-.btn-signin-nav:hover {
-transform: translateY(-2px);
-box-shadow: 0 6px 22px rgba(255,200,87,0.55) !important;
-}
-.user-avatar {
-width: 38px; height: 38px; border-radius: 50%;
-border: 2.5px solid var(--gold);
-cursor: pointer; object-fit: cover;
-transition: var(--transition);
-}
-.user-avatar:hover { transform: scale(1.08); }
-.user-name-nav {
-color: var(--white); font-size: 0.88rem; font-weight: 500;
-}
-/* Hamburger */
-.nav-hamburger {
-display: none; flex-direction: column; gap: 5px;
-background: none; border: none; margin-left: auto; padding: 8px;
-}
-.nav-hamburger span {
-display: block; width: 24px; height: 2px;
-background: var(--gold); border-radius: 2px; transition: var(--transition);
-}
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 40px 80px;position:relative;overflow:hidden;text-align:center;}
+#hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(28,63,168,.18) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 50% 70%,rgba(201,164,74,.05) 0%,transparent 60%);pointer-events:none;}
+.hero-in{position:relative;z-index:1;max-width:840px;margin:0 auto;}
+.h-pill{display:inline-flex;align-items:center;gap:8px;background:var(--goldd);border:1px solid var(--bdr);border-radius:30px;padding:6px 18px;font-size:.76rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:28px;animation:fu .8s ease both;}
+.h-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.h-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:700;line-height:1.05;letter-spacing:-2px;margin-bottom:14px;animation:fu .9s .1s ease both;}
+.h-title em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.h-sub{font-size:1.08rem;color:var(--tx2);line-height:1.75;max-width:540px;margin:0 auto 44px;animation:fu 1s .2s ease both;}
+.h-cta{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;animation:fu 1s .3s ease both;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:.95rem;padding:15px 34px;border-radius:50px;box-shadow:0 8px 28px rgba(201,164,74,.35);transition:.25s;display:inline-flex;align-items:center;gap:8px;}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(201,164,74,.5);}
+.btn-outline{color:var(--tx2);font-weight:500;font-size:.95rem;padding:14px 28px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);transition:.25s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);background:var(--goldd);}
+.h-stats{display:flex;align-items:center;justify-content:center;gap:56px;margin-top:76px;padding-top:52px;border-top:1px solid var(--bdr);animation:fu 1s .5s ease both;flex-wrap:wrap;}
+.h-snum{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--gold);letter-spacing:-1px;line-height:1;}
+.h-slbl{font-size:.76rem;color:var(--tx3);text-transform:uppercase;letter-spacing:1.5px;margin-top:5px;}
+
+/* SECTIONS */
+section{padding:100px 48px;}
+.inner{max-width:1280px;margin:0 auto;}
+.slbl{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.slbl::before{content:'';width:24px;height:1px;background:var(--gold);}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.15;letter-spacing:-.5px;margin-bottom:14px;}
+.ssub{font-size:.98rem;color:var(--tx2);max-width:540px;line-height:1.75;}
+
+/* PARTS */
+#parts{background:var(--surf);}
+#ph{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;flex-wrap:wrap;gap:20px;}
+#psearch{background:var(--card);border:1.5px solid var(--bdr);border-radius:12px;padding:11px 18px;color:var(--tx);font-size:.88rem;font-family:'DM Sans',sans-serif;width:260px;outline:none;transition:.2s;}
+#psearch:focus{border-color:var(--gold);}
+#psearch::placeholder{color:var(--tx3);}
+#pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:16px;}
+.pcard{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rlg);padding:28px 26px;cursor:pointer;transition:.3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
+.pcard::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,164,74,.07) 0%,transparent 60%);opacity:0;transition:.3s;}
+.pcard:hover{border-color:var(--bdr2);transform:translateY(-5px);box-shadow:0 24px 56px rgba(0,0,0,.5),0 0 40px rgba(201,164,74,.1);}
+.pcard:hover::after{opacity:1;}
+.pnum{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:700;color:rgba(201,164,74,.12);line-height:1;position:absolute;top:16px;right:22px;letter-spacing:-2px;pointer-events:none;}
+.pbadge{display:inline-flex;background:var(--goldd);border:1px solid var(--bdr);color:var(--gold);font-size:.7rem;font-weight:700;letter-spacing:1px;padding:3px 10px;border-radius:6px;text-transform:uppercase;margin-bottom:14px;}
+.ptitle{font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-weight:700;line-height:1.3;color:var(--tx);margin-bottom:8px;}
+.parts{font-size:.76rem;color:var(--tx3);margin-bottom:16px;font-weight:500;letter-spacing:.5px;}
+.pchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;}
+.pchip{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:var(--tx2);font-size:.7rem;padding:3px 9px;border-radius:6px;}
+.pbtn{width:100%;background:transparent;border:1.5px solid var(--bdr);color:var(--gold);font-size:.82rem;font-weight:600;padding:10px;border-radius:10px;transition:.2s;letter-spacing:.3px;}
+.pcard:hover .pbtn{background:var(--gold);color:var(--bg);border-color:var(--gold);}
+
+/* LEADERBOARD */
+#lb{background:var(--bg);}
+.lb-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px;}
+.lb-tab{background:var(--card);border:1.5px solid var(--bdr);color:var(--tx2);font-size:.81rem;font-weight:600;padding:8px 18px;border-radius:30px;transition:.2s;}
+.lb-tab.active,.lb-tab:hover{background:var(--goldd);border-color:var(--gold);color:var(--gold);}
+.lb-empty{text-align:center;padding:56px;color:var(--tx3);font-size:.95rem;}
+.lb-row{display:flex;align-items:center;gap:16px;background:var(--card);border:1.5px solid var(--bdr);border-radius:14px;padding:16px 22px;margin-bottom:10px;transition:.2s;}
+.lb-row:hover{border-color:var(--bdr2);}
+.lb-row.r1{border-color:rgba(255,215,0,.28);background:rgba(255,215,0,.03);}
+.lb-row.r2{border-color:rgba(192,192,192,.22);}
+.lb-row.r3{border-color:rgba(205,127,50,.22);}
+.lb-rank{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;width:36px;text-align:center;color:var(--tx3);}
+.lb-row.r1 .lb-rank{color:#FFD700;}
+.lb-row.r2 .lb-rank{color:#C0C0C0;}
+.lb-row.r3 .lb-rank{color:#CD7F32;}
+.lb-pic{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--bdr);}
+.lb-inf{flex:1;}
+.lb-nm{font-weight:600;font-size:.92rem;color:var(--tx);}
+.lb-tm{font-size:.74rem;color:var(--tx3);margin-top:2px;}
+.lb-sc{font-family:'Bebas Neue',cursive;font-size:1.7rem;letter-spacing:1px;color:var(--gold);}
+.shimmer{background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:14px;}
+@keyframes shim{to{background-position:-200% 0}}
+
+/* MODALS */
+.moverlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
+.moverlay.open{display:flex;}
+.mbox{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rlg);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh);animation:min .3s cubic-bezier(.4,0,.2,1) both;}
+@keyframes min{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;padding:28px 28px 0;}
+.mtitle{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--tx);}
+.msub{font-size:.84rem;color:var(--tx2);margin-top:3px;}
+.mclose{color:var(--tx3);font-size:1.2rem;padding:6px 8px;border-radius:8px;transition:.2s;line-height:1;}
+.mclose:hover{color:var(--tx);background:rgba(255,255,255,.06);}
+.mbody{padding:24px 28px 32px;}
+.mdivider{height:1px;background:var(--bdr);margin:20px 0;}
+
+/* SIGN IN MODAL */
+.si-brand{text-align:center;padding-bottom:4px;}
+.si-logo{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:var(--gold);margin-bottom:6px;}
+.si-tag{font-size:.86rem;color:var(--tx2);line-height:1.6;}
+.si-gsi{display:flex;justify-content:center;padding:28px 0 16px;}
+.si-note{font-size:.74rem;color:var(--tx3);text-align:center;line-height:1.7;}
+
+/* QUIZ CONFIG MODAL */
+.diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px;}
+.dbtn{background:var(--surf);border:1.5px solid var(--bdr);color:var(--tx2);font-size:.84rem;font-weight:600;padding:14px 10px;border-radius:12px;transition:.2s;text-align:center;}
+.dbtn:hover{border-color:var(--bdr2);color:var(--tx);}
+.dbtn.on{background:var(--goldd);border-color:var(--gold);color:var(--gold);}
+.dicon{font-size:1.3rem;display:block;margin-bottom:5px;}
+.btn-start{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:.97rem;padding:15px;border-radius:14px;box-shadow:0 8px 24px rgba(201,164,74,.3);transition:.25s;}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(201,164,74,.45);}
+
+/* PROFILE MODAL */
+.prof-h{text-align:center;padding-bottom:4px;}
+.prof-pic{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);margin:0 auto 14px;box-shadow:0 0 32px rgba(201,164,74,.3);}
+.prof-name{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;}
+.prof-email{font-size:.82rem;color:var(--tx2);margin-top:4px;}
+.prof-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0;}
+.ps-box{background:var(--surf);border:1px solid var(--bdr);border-radius:12px;padding:14px 10px;text-align:center;}
+.ps-num{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--gold);}
+.ps-lbl{font-size:.68rem;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.priv-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--bdr);}
+.priv-row:last-of-type{border:none;}
+.priv-lbl{font-size:.88rem;font-weight:500;}
+.priv-desc{font-size:.74rem;color:var(--tx3);margin-top:2px;}
+.tog{position:relative;width:44px;height:24px;flex-shrink:0;}
+.tog input{opacity:0;width:0;height:0;}
+.tog-track{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:12px;transition:.25s;cursor:pointer;}
+.tog input:checked + .tog-track{background:var(--gold);}
+.tog-track::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.25s;}
+.tog input:checked + .tog-track::after{transform:translateX(20px);}
+.prof-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+.btn-so{background:var(--surf);border:1.5px solid var(--bdr);color:var(--tx2);font-weight:600;font-size:.87rem;padding:12px;border-radius:12px;transition:.2s;}
+.btn-so:hover{border-color:var(--bdr2);color:var(--tx);}
+.btn-del{background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);color:var(--er);font-weight:600;font-size:.87rem;padding:12px;border-radius:12px;transition:.2s;}
+.btn-del:hover{background:rgba(239,68,68,.15);}
+
+/* TOAST */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;}
+.ti{background:var(--card2);border:1.5px solid var(--bdr);color:var(--tx);font-size:.87rem;font-weight:500;padding:12px 24px;border-radius:30px;box-shadow:var(--sh);opacity:0;transform:translateY(12px);transition:.3s cubic-bezier(.4,0,.2,1);white-space:nowrap;}
+.ti.show{opacity:1;transform:translateY(0);}
+.ti.gold{border-color:var(--bdr2);color:var(--gold);}
+.ti.red{border-color:rgba(239,68,68,.3);color:var(--er);}
+
+/* FOOTER */
+footer{background:var(--surf);border-top:1px solid var(--bdr);padding:48px 48px 32px;text-align:center;}
+.ft-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--gold);margin-bottom:10px;}
+.ft-copy{font-size:.76rem;color:var(--tx3);}
+
+@keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
 @media(max-width:768px){
-.nav-links { display: none; }
-.nav-hamburger { display: flex; }
-#lexiq-nav { padding: 0 20px; }
+  #nav{padding:0 20px;}
+  .n-links{display:none;}
+  section{padding:70px 20px;}
+  #ph{flex-direction:column;align-items:flex-start;}
+  #psearch{width:100%;}
+  .h-stats{gap:28px;}
+  footer{padding:40px 20px 28px;}
 }
-
-/* ============================================================
-HERO SECTION
-============================================================ */
-#hero {
-min-height: 100vh;
-background: linear-gradient(135deg, #060f24 0%, var(--navy) 40%, var(--royal) 80%, #1a52c4 100%);
-display: flex; align-items: center; justify-content: center;
-position: relative; overflow: hidden;
-padding: 100px 40px 60px;
-}
-/* Animated Scales of Justice SVG Background */
-.hero-bg-pattern {
-position: absolute; inset: 0; opacity: 0.04;
-background-image:
-radial-gradient(circle at 20% 50%, var(--gold) 0, transparent 50%),
-radial-gradient(circle at 80% 20%, var(--royal-light) 0, transparent 40%);
-animation: bgPulse 8s ease-in-out infinite alternate;
-}
-@keyframes bgPulse {
-from { opacity: 0.04; } to { opacity: 0.09; }
-}
-/* Floating particles */
-.hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.particle {
-position: absolute; width: 3px; height: 3px;
-background: var(--gold); border-radius: 50%; opacity: 0;
-animation: floatUp linear infinite;
-}
-@keyframes floatUp {
-0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-10%  { opacity: 0.6; }
-90%  { opacity: 0.2; }
-100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
-}
-/* Decorative circles */
-.hero-circle {
-position: absolute; border-radius: 50%;
-border: 1px solid rgba(255,200,87,0.12);
-animation: spinSlow linear infinite;
-}
-.hero-circle-1 { width: 500px; height: 500px; top: -100px; right: -100px; animation-duration: 40s; }
-.hero-circle-2 { width: 300px; height: 300px; bottom: 50px; left: -80px; animation-duration: 28s; animation-direction: reverse; }
-@keyframes spinSlow { to { transform: rotate(360deg); } }
-
-.hero-content {
-position: relative; z-index: 2;
-text-align: center; max-width: 860px;
-}
-.hero-badge {
-display: inline-flex; align-items: center; gap: 8px;
-background: rgba(255,200,87,0.12);
-border: 1px solid rgba(255,200,87,0.3);
-color: var(--gold); font-size: 0.8rem; font-weight: 600;
-padding: 6px 18px; border-radius: 30px;
-letter-spacing: 1.5px; text-transform: uppercase;
-margin-bottom: 28px;
-animation: fadeSlideDown 0.8s ease both;
-}
-.hero-badge::before {
-content: '⚖️'; font-size: 1rem;
-}
-.hero-title {
-font-family: var(--font-display);
-font-size: clamp(3rem, 7vw, 5.5rem);
-font-weight: 900; color: var(--white);
-line-height: 1.05; letter-spacing: -2px;
-margin-bottom: 8px;
-animation: fadeSlideDown 0.8s 0.15s ease both;
-}
-.hero-title .lex { color: var(--white); }
-.hero-title .iq  {
-color: var(--gold);
-text-shadow: 0 0 40px rgba(255,200,87,0.5);
-}
-.hero-tagline {
-font-family: var(--font-accent);
-font-size: clamp(0.9rem, 2vw, 1.15rem);
-color: rgba(255,200,87,0.7);
-letter-spacing: 5px; text-transform: uppercase;
-margin-bottom: 24px;
-animation: fadeSlideDown 0.8s 0.25s ease both;
-}
-.hero-desc {
-font-size: 1.05rem; color: rgba(255,255,255,0.72);
-max-width: 600px; margin: 0 auto 44px;
-font-weight: 300; line-height: 1.8;
-animation: fadeSlideDown 0.8s 0.35s ease both;
-}
-.hero-cta {
-display: flex; gap: 16px; justify-content: center;
-flex-wrap: wrap;
-animation: fadeSlideDown 0.8s 0.45s ease both;
-}
-.btn-primary {
-background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-color: var(--royal); font-weight: 700; font-size: 1rem;
-padding: 16px 40px; border-radius: 50px; border: none;
-transition: var(--transition);
-box-shadow: 0 4px 28px rgba(255,200,87,0.4);
-display: inline-flex; align-items: center; gap: 10px;
-}
-.btn-primary:hover {
-transform: translateY(-3px);
-box-shadow: 0 10px 40px rgba(255,200,87,0.6);
-}
-.btn-outline {
-background: transparent;
-color: var(--white); font-weight: 600; font-size: 1rem;
-padding: 15px 36px; border-radius: 50px;
-border: 1.5px solid rgba(255,255,255,0.3);
-transition: var(--transition);
-display: inline-flex; align-items: center; gap: 10px;
-}
-.btn-outline:hover {
-background: rgba(255,255,255,0.08);
-border-color: rgba(255,255,255,0.6);
-transform: translateY(-3px);
-}
-
-/* Hero stats bar */
-.hero-stats {
-position: absolute; bottom: 0; left: 0; right: 0;
-background: rgba(255,255,255,0.06);
-backdrop-filter: blur(12px);
-border-top: 1px solid rgba(255,200,87,0.15);
-display: flex; justify-content: center;
-gap: 0; z-index: 2;
-}
-.stat-item {
-flex: 1; max-width: 220px;
-padding: 22px 30px; text-align: center;
-border-right: 1px solid rgba(255,200,87,0.1);
-animation: fadeSlideDown 0.8s 0.6s ease both;
-}
-.stat-item:last-child { border-right: none; }
-.stat-number {
-font-family: var(--font-accent);
-font-size: 2rem; color: var(--gold);
-letter-spacing: 1px;
-}
-.stat-label {
-font-size: 0.75rem; color: rgba(255,255,255,0.55);
-letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px;
-}
-
-/* Scroll chevron */
-.scroll-hint {
-position: absolute; bottom: 90px; left: 50%;
-transform: translateX(-50%);
-display: flex; flex-direction: column; align-items: center;
-gap: 6px; color: rgba(255,255,255,0.35); font-size: 0.72rem;
-letter-spacing: 2px; text-transform: uppercase;
-animation: bounce 2s ease-in-out infinite;
-z-index: 2;
-}
-.scroll-hint svg { opacity: 0.5; }
-@keyframes bounce {
-0%,100% { transform: translateX(-50%) translateY(0); }
-50%      { transform: translateX(-50%) translateY(8px); }
-}
-
-/* ── GENERAL SECTION ───────────────────────────────────── */
-section { padding: 90px 40px; }
-.section-label {
-font-family: var(--font-accent);
-font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase;
-color: var(--royal); margin-bottom: 10px;
-display: flex; align-items: center; gap: 10px;
-}
-.section-label::before {
-content: ''; display: block; width: 30px; height: 2px; background: var(--gold);
-}
-.section-title {
-font-family: var(--font-display);
-font-size: clamp(1.9rem, 4vw, 2.8rem);
-font-weight: 900; color: var(--text-dark);
-line-height: 1.15; margin-bottom: 16px;
-}
-.section-sub {
-font-size: 1rem; color: var(--text-muted); max-width: 520px;
-line-height: 1.75; margin-bottom: 50px;
-}
-.center-text { text-align: center; }
-.center-text .section-label { justify-content: center; }
-.center-text .section-label::before { display: none; }
-.center-text .section-sub { margin: 0 auto 50px; }
-
-/* ============================================================
-HOW IT WORKS
-============================================================ */
-#how-it-works {
-background: linear-gradient(180deg, var(--off-white) 0%, #e8edf8 100%);
-}
-.steps-grid {
-display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-gap: 28px; max-width: 1100px; margin: 0 auto;
-}
-.step-card {
-background: var(--white);
-border-radius: var(--radius-lg);
-padding: 36px 28px;
-border: 1px solid rgba(11,61,145,0.08);
-box-shadow: var(--shadow-card);
-position: relative; overflow: hidden;
-transition: var(--transition);
-}
-.step-card::before {
-content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-background: linear-gradient(90deg, var(--royal), var(--gold));
-}
-.step-card:hover {
-transform: translateY(-6px);
-box-shadow: 0 20px 60px rgba(11,61,145,0.2);
-}
-.step-number {
-font-family: var(--font-accent);
-font-size: 4.5rem; color: rgba(11,61,145,0.06);
-position: absolute; top: 10px; right: 20px;
-line-height: 1;
-}
-.step-icon {
-width: 56px; height: 56px; border-radius: 16px;
-background: linear-gradient(135deg, var(--royal), #1a52c4);
-display: flex; align-items: center; justify-content: center;
-font-size: 1.5rem; margin-bottom: 20px;
-box-shadow: 0 4px 20px rgba(11,61,145,0.3);
-}
-.step-title {
-font-family: var(--font-display);
-font-size: 1.15rem; font-weight: 700;
-color: var(--text-dark); margin-bottom: 10px;
-}
-.step-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; }
-
-/* ============================================================
-QUIZ SECTIONS
-============================================================ */
-#quiz-sections { background: var(--white); }
-.quiz-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-gap: 28px; max-width: 1200px; margin: 0 auto;
-}
-.quiz-card {
-border-radius: var(--radius-lg);
-overflow: hidden; position: relative;
-background: var(--white);
-border: 1.5px solid rgba(11,61,145,0.1);
-box-shadow: var(--shadow-card);
-transition: var(--transition);
-cursor: pointer;
-}
-.quiz-card:hover {
-transform: translateY(-8px);
-box-shadow: 0 24px 72px rgba(11,61,145,0.22);
-border-color: var(--royal);
-}
-.quiz-card-banner {
-height: 140px;
-background: linear-gradient(135deg, var(--royal) 0%, #1a52c4 60%, var(--navy) 100%);
-position: relative; overflow: hidden;
-display: flex; align-items: center; justify-content: center;
-}
-.quiz-card-banner .card-emblem {
-font-size: 4rem; opacity: 0.9;
-filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
-transition: var(--transition);
-}
-.quiz-card:hover .card-emblem { transform: scale(1.15) rotate(-5deg); }
-.quiz-card-banner::after {
-content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
-background: linear-gradient(transparent, rgba(11,61,145,0.3));
-}
-.quiz-card-body { padding: 28px 24px; }
-.quiz-card-category {
-font-size: 0.72rem; font-weight: 700; letter-spacing: 2px;
-text-transform: uppercase; color: var(--royal);
-margin-bottom: 8px;
-}
-.quiz-card-title {
-font-family: var(--font-display);
-font-size: 1.35rem; font-weight: 800;
-color: var(--text-dark); margin-bottom: 10px;
-}
-.quiz-card-desc {
-font-size: 0.85rem; color: var(--text-muted); line-height: 1.65;
-margin-bottom: 20px;
-}
-.quiz-meta {
-display: flex; gap: 12px; align-items: center; margin-bottom: 20px;
-}
-.quiz-meta-badge {
-background: var(--off-white);
-color: var(--text-muted); font-size: 0.75rem; font-weight: 600;
-padding: 4px 12px; border-radius: 20px;
-display: flex; align-items: center; gap: 5px;
-}
-.btn-quiz-start {
-width: 100%;
-background: linear-gradient(135deg, var(--royal), var(--royal-light));
-color: var(--white); font-weight: 700; font-size: 0.92rem;
-padding: 13px 0; border-radius: 12px; border: none;
-transition: var(--transition);
-letter-spacing: 0.5px;
-display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.btn-quiz-start:hover {
-background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-color: var(--royal);
-transform: translateY(-2px);
-}
-/* Coming Soon Card */
-.quiz-card.coming-soon {
-opacity: 0.65; cursor: default;
-pointer-events: none;
-}
-.quiz-card.coming-soon:hover { transform: none; }
-.coming-soon-ribbon {
-position: absolute; top: 18px; right: -28px;
-background: var(--gold); color: var(--navy);
-font-size: 0.68rem; font-weight: 800;
-letter-spacing: 2px; text-transform: uppercase;
-padding: 5px 40px; transform: rotate(40deg);
-z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-/* Active Section badge */
-.active-ribbon {
-position: absolute; top: 18px; left: 18px; z-index: 10;
-background: rgba(255,200,87,0.18); border: 1px solid rgba(255,200,87,0.5);
-color: var(--gold); font-size: 0.65rem; font-weight: 800;
-letter-spacing: 2px; text-transform: uppercase;
-padding: 4px 12px; border-radius: 20px;
-}
-
-/* ============================================================
-CONSTITUTIONAL LAW — PARTS SECTION
-============================================================ */
-#constitutional-parts {
-background: linear-gradient(180deg, #e8edf8 0%, var(--off-white) 100%);
-}
-.parts-header {
-display: flex; align-items: center; gap: 20px;
-margin-bottom: 40px; flex-wrap: wrap;
-}
-.parts-header-text { flex: 1; }
-.parts-search {
-position: relative; max-width: 320px; width: 100%;
-}
-.parts-search input {
-width: 100%; padding: 12px 44px 12px 18px;
-border: 1.5px solid rgba(11,61,145,0.2);
-border-radius: 30px; font-family: var(--font-body);
-font-size: 0.9rem; color: var(--text-dark);
-background: var(--white);
-transition: var(--transition);
-outline: none;
-}
-.parts-search input:focus {
-border-color: var(--royal);
-box-shadow: 0 0 0 3px rgba(11,61,145,0.08);
-}
-.parts-search-icon {
-position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-color: var(--text-muted); pointer-events: none;
-}
-.parts-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-gap: 20px; max-width: 1200px; margin: 0 auto;
-}
-.part-card {
-background: var(--white);
-border-radius: var(--radius);
-padding: 24px 20px;
-border: 1.5px solid rgba(11,61,145,0.08);
-box-shadow: 0 4px 20px rgba(11,61,145,0.08);
-transition: var(--transition);
-display: flex; flex-direction: column;
-position: relative; overflow: hidden;
-cursor: pointer;
-}
-.part-card:hover {
-border-color: var(--royal);
-transform: translateY(-5px);
-box-shadow: 0 16px 50px rgba(11,61,145,0.18);
-}
-.part-card::before {
-content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-width: 4px;
-background: linear-gradient(180deg, var(--royal), var(--gold));
-}
-.part-num {
-font-family: var(--font-accent);
-font-size: 2.8rem; color: rgba(11,61,145,0.07);
-position: absolute; top: 8px; right: 14px;
-line-height: 1; letter-spacing: 1px;
-}
-.part-tag {
-font-size: 0.68rem; font-weight: 700; letter-spacing: 2px;
-text-transform: uppercase; color: var(--gold-dark);
-background: rgba(255,200,87,0.12);
-padding: 3px 10px; border-radius: 20px;
-width: fit-content; margin-bottom: 10px;
-}
-.part-title {
-font-family: var(--font-display);
-font-size: 1.05rem; font-weight: 800;
-color: var(--text-dark); margin-bottom: 6px;
-line-height: 1.3;
-}
-.part-articles {
-font-size: 0.78rem; color: var(--text-muted); margin-bottom: 16px;
-}
-.part-topics {
-display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;
-}
-.topic-chip {
-font-size: 0.7rem; font-weight: 500; color: var(--royal);
-background: rgba(11,61,145,0.07); padding: 3px 10px; border-radius: 20px;
-}
-.btn-start-part {
-width: 100%;
-background: linear-gradient(135deg, var(--royal), #1a52c4);
-color: var(--white); font-weight: 700; font-size: 0.83rem;
-padding: 11px; border-radius: 10px; border: none;
-transition: var(--transition);
-letter-spacing: 0.5px;
-display: flex; align-items: center; justify-content: center; gap: 6px;
-margin-top: auto;
-}
-.btn-start-part:hover {
-background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-color: var(--royal);
-}
-
-/* ============================================================
-LEADERBOARD SECTION
-============================================================ */
-#leaderboard-section {
-background: linear-gradient(135deg, var(--navy) 0%, var(--royal) 60%, #1a52c4 100%);
-color: var(--white);
-}
-#leaderboard-section .section-title { color: var(--white); }
-#leaderboard-section .section-label { color: var(--gold); }
-.leaderboard-tabs {
-display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap;
-}
-.lb-tab {
-background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 600;
-padding: 9px 22px; border-radius: 30px; cursor: pointer; transition: var(--transition);
-}
-.lb-tab.active, .lb-tab:hover {
-background: var(--gold); color: var(--royal); border-color: var(--gold);
-}
-.leaderboard-table {
-background: rgba(255,255,255,0.05);
-backdrop-filter: blur(12px);
-border-radius: var(--radius-lg);
-border: 1px solid rgba(255,255,255,0.1);
-overflow: hidden; max-width: 800px; margin: 0 auto;
-}
-.lb-header {
-display: grid; grid-template-columns: 60px 1fr 130px 100px;
-padding: 16px 24px;
-background: rgba(255,200,87,0.1);
-border-bottom: 1px solid rgba(255,255,255,0.08);
-font-size: 0.72rem; font-weight: 700;
-letter-spacing: 2px; text-transform: uppercase;
-color: var(--gold);
-}
-.lb-row {
-display: grid; grid-template-columns: 60px 1fr 130px 100px;
-padding: 14px 24px;
-border-bottom: 1px solid rgba(255,255,255,0.05);
-align-items: center; transition: var(--transition);
-}
-.lb-row:hover { background: rgba(255,255,255,0.05); }
-.lb-row:last-child { border-bottom: none; }
-.lb-rank {
-font-family: var(--font-accent);
-font-size: 1.3rem; color: rgba(255,255,255,0.4);
-}
-.lb-rank.gold-rank   { color: #FFD700; }
-.lb-rank.silver-rank { color: #C0C0C0; }
-.lb-rank.bronze-rank { color: #CD7F32; }
-.lb-user {
-display: flex; align-items: center; gap: 12px;
-}
-.lb-avatar {
-width: 36px; height: 36px; border-radius: 50%;
-background: linear-gradient(135deg, var(--royal), var(--navy));
-display: flex; align-items: center; justify-content: center;
-font-weight: 700; font-size: 0.85rem; color: var(--gold);
-border: 2px solid rgba(255,200,87,0.2);
-overflow: hidden;
-}
-.lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.lb-name { font-weight: 600; font-size: 0.92rem; color: var(--white); }
-.lb-time { font-size: 0.85rem; color: rgba(255,255,255,0.65); }
-.lb-score {
-font-family: var(--font-accent);
-font-size: 1.2rem; color: var(--gold);
-letter-spacing: 1px;
-}
-.lb-empty {
-padding: 48px 24px; text-align: center;
-color: rgba(255,255,255,0.4); font-size: 0.9rem;
-}
-
-/* ============================================================
-FEATURES STRIP
-============================================================ */
-#features-strip {
-background: var(--white); padding: 80px 40px;
-}
-.features-grid {
-display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-gap: 24px; max-width: 1100px; margin: 0 auto;
-}
-.feature-item {
-text-align: center; padding: 32px 20px;
-border-radius: var(--radius);
-transition: var(--transition);
-}
-.feature-item:hover {
-background: var(--off-white);
-transform: translateY(-4px);
-}
-.feature-icon {
-font-size: 2.4rem; margin-bottom: 16px;
-display: block;
-}
-.feature-title {
-font-family: var(--font-display);
-font-size: 1rem; font-weight: 700;
-color: var(--text-dark); margin-bottom: 8px;
-}
-.feature-text { font-size: 0.83rem; color: var(--text-muted); line-height: 1.65; }
-
-/* ============================================================
-TESTIMONIALS
-============================================================ */
-#testimonials { background: var(--off-white); }
-.testi-grid {
-display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-gap: 24px; max-width: 1100px; margin: 0 auto;
-}
-.testi-card {
-background: var(--white);
-border-radius: var(--radius-lg);
-padding: 32px 28px;
-border: 1px solid rgba(11,61,145,0.08);
-box-shadow: 0 4px 20px rgba(11,61,145,0.08);
-transition: var(--transition);
-position: relative;
-}
-.testi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
-.testi-quote {
-font-family: var(--font-display);
-font-size: 3.5rem; color: rgba(11,61,145,0.1);
-line-height: 0.5; margin-bottom: 20px;
-}
-.testi-text {
-font-size: 0.9rem; color: var(--text-muted);
-line-height: 1.75; margin-bottom: 22px;
-font-style: italic;
-}
-.testi-user {
-display: flex; align-items: center; gap: 12px;
-}
-.testi-avatar {
-width: 44px; height: 44px; border-radius: 50%;
-background: linear-gradient(135deg, var(--royal), var(--gold));
-display: flex; align-items: center; justify-content: center;
-color: var(--white); font-weight: 700; font-size: 1rem;
-}
-.testi-name { font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
-.testi-role { font-size: 0.78rem; color: var(--text-muted); }
-.stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 14px; }
-
-/* ============================================================
-MODAL (Sign-In / Quiz Config / Profile)
-============================================================ */
-.modal-overlay {
-position: fixed; inset: 0; z-index: 2000;
-background: rgba(6,15,36,0.75);
-backdrop-filter: blur(8px);
-display: none; align-items: center; justify-content: center;
-padding: 20px;
-}
-.modal-overlay.active { display: flex; }
-.modal-box {
-background: var(--white);
-border-radius: var(--radius-lg);
-width: 100%; max-width: 480px;
-overflow: hidden;
-box-shadow: 0 32px 100px rgba(11,61,145,0.35);
-animation: modalIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
-}
-@keyframes modalIn {
-from { transform: scale(0.85) translateY(40px); opacity: 0; }
-to   { transform: scale(1) translateY(0); opacity: 1; }
-}
-.modal-header {
-padding: 28px 32px 20px;
-background: linear-gradient(135deg, var(--royal), #1a52c4);
-color: var(--white); position: relative;
-}
-.modal-header h2 {
-font-family: var(--font-display);
-font-size: 1.5rem; font-weight: 800;
-}
-.modal-header p {
-font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 4px;
-}
-.modal-close {
-position: absolute; top: 18px; right: 20px;
-background: rgba(255,255,255,0.15); border: none;
-color: var(--white); width: 32px; height: 32px;
-border-radius: 50%; font-size: 1rem;
-display: flex; align-items: center; justify-content: center;
-cursor: pointer; transition: var(--transition);
-}
-.modal-close:hover { background: rgba(255,255,255,0.3); }
-.modal-body { padding: 32px; }
-/* Google Sign-In custom button */
-.google-signin-btn {
-width: 100%; display: flex; align-items: center; justify-content: center; gap: 14px;
-padding: 15px 24px; border-radius: 12px;
-border: 1.5px solid rgba(11,61,145,0.2);
-background: var(--white); cursor: pointer;
-font-family: var(--font-body); font-size: 0.95rem; font-weight: 600;
-color: var(--text-dark); transition: var(--transition);
-box-shadow: 0 2px 12px rgba(11,61,145,0.08);
-}
-.google-signin-btn:hover {
-border-color: var(--royal);
-box-shadow: 0 4px 24px rgba(11,61,145,0.18);
-transform: translateY(-2px);
-}
-.google-icon {
-width: 22px; height: 22px;
-}
-.modal-divider {
-text-align: center; position: relative; margin: 20px 0;
-color: var(--text-muted); font-size: 0.8rem;
-}
-.modal-divider::before, .modal-divider::after {
-content: ''; position: absolute;
-top: 50%; width: 40%; height: 1px;
-background: rgba(11,61,145,0.12);
-}
-.modal-divider::before { left: 0; }
-.modal-divider::after  { right: 0; }
-.modal-benefit {
-display: flex; align-items: flex-start; gap: 12px;
-margin-bottom: 14px; font-size: 0.85rem; color: var(--text-muted);
-}
-.modal-benefit-icon {
-width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
-background: rgba(11,61,145,0.08);
-display: flex; align-items: center; justify-content: center;
-font-size: 0.9rem;
-}
-.modal-privacy {
-font-size: 0.75rem; color: var(--text-muted); text-align: center;
-margin-top: 18px; line-height: 1.6;
-}
-.modal-privacy a { color: var(--royal); text-decoration: underline; }
-
-/* Quiz Config Modal */
-.config-field { margin-bottom: 22px; }
-.config-label {
-font-size: 0.85rem; font-weight: 700; color: var(--text-dark);
-margin-bottom: 10px; display: block;
-}
-.difficulty-btns { display: flex; gap: 10px; }
-.diff-btn {
-flex: 1; padding: 11px; border-radius: 10px;
-border: 1.5px solid rgba(11,61,145,0.2);
-background: var(--white); color: var(--text-dark);
-font-weight: 600; font-size: 0.85rem;
-cursor: pointer; transition: var(--transition);
-text-align: center;
-}
-.diff-btn:hover, .diff-btn.selected {
-border-color: var(--royal);
-background: rgba(11,61,145,0.06);
-color: var(--royal);
-}
-.diff-btn.easy.selected   { border-color: #22c55e; background: rgba(34,197,94,0.08); color: #16a34a; }
-.diff-btn.medium.selected { border-color: var(--gold); background: rgba(255,200,87,0.12); color: #b45309; }
-.diff-btn.hard.selected   { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #b91c1c; }
-.btn-start-quiz {
-width: 100%;
-background: linear-gradient(135deg, var(--royal), var(--royal-light));
-color: var(--white); font-weight: 700; font-size: 1rem;
-padding: 15px; border-radius: 12px; border: none;
-cursor: pointer; transition: var(--transition);
-display: flex; align-items: center; justify-content: center; gap: 10px;
-}
-.btn-start-quiz:hover {
-background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-color: var(--royal);
-transform: translateY(-2px);
-}
-
-/* Profile Modal */
-.profile-avatar-big {
-width: 80px; height: 80px; border-radius: 50%;
-border: 3px solid var(--royal); margin: 0 auto 12px;
-display: block; object-fit: cover;
-}
-.profile-name-big {
-font-family: var(--font-display);
-font-size: 1.3rem; font-weight: 800;
-color: var(--text-dark); text-align: center; margin-bottom: 4px;
-}
-.profile-email {
-font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 24px;
-}
-.profile-stats-row {
-display: grid; grid-template-columns: repeat(3,1fr);
-gap: 12px; margin-bottom: 24px;
-}
-.profile-stat-box {
-background: var(--off-white); border-radius: var(--radius);
-padding: 14px 10px; text-align: center;
-}
-.profile-stat-num {
-font-family: var(--font-accent); font-size: 1.6rem; color: var(--royal);
-}
-.profile-stat-lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-.profile-actions { display: flex; flex-direction: column; gap: 10px; }
-.btn-signout {
-width: 100%; padding: 12px; border-radius: 10px;
-border: 1.5px solid rgba(11,61,145,0.2);
-background: var(--white); color: var(--text-dark);
-font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition);
-display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.btn-signout:hover { border-color: var(--royal); background: rgba(11,61,145,0.04); }
-.btn-delete-account {
-width: 100%; padding: 12px; border-radius: 10px;
-border: 1.5px solid rgba(239,68,68,0.3);
-background: rgba(239,68,68,0.04); color: #dc2626;
-font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition);
-display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.btn-delete-account:hover { background: rgba(239,68,68,0.08); border-color: #dc2626; }
-.privacy-toggles { margin-top: 20px; border-top: 1px solid rgba(11,61,145,0.08); padding-top: 20px; }
-.privacy-toggle-row {
-display: flex; align-items: center; justify-content: space-between;
-margin-bottom: 14px;
-}
-.privacy-toggle-label { font-size: 0.85rem; color: var(--text-dark); font-weight: 500; }
-.toggle-switch {
-position: relative; display: inline-block; width: 44px; height: 24px;
-}
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-position: absolute; inset: 0;
-background: #dde3f0; border-radius: 24px; cursor: pointer; transition: var(--transition);
-}
-.toggle-slider::before {
-content: ''; position: absolute;
-height: 18px; width: 18px; left: 3px; bottom: 3px;
-background: var(--white); border-radius: 50%; transition: var(--transition);
-box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-.toggle-switch input:checked + .toggle-slider { background: var(--royal); }
-.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
-
-/* ============================================================
-FOOTER
-============================================================ */
-footer {
-background: linear-gradient(135deg, #060f24, var(--navy));
-color: rgba(255,255,255,0.75); padding: 70px 40px 30px;
-}
-.footer-grid {
-display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-gap: 48px; max-width: 1200px; margin: 0 auto 50px;
-}
-.footer-brand .nav-logo { margin-bottom: 16px; }
-.footer-brand p { font-size: 0.85rem; line-height: 1.75; color: rgba(255,255,255,0.5); max-width: 280px; }
-.footer-social {
-display: flex; gap: 10px; margin-top: 20px;
-}
-.social-icon {
-width: 38px; height: 38px; border-radius: 10px;
-background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
-display: flex; align-items: center; justify-content: center;
-font-size: 1rem; color: rgba(255,255,255,0.7);
-transition: var(--transition);
-}
-.social-icon:hover {
-background: var(--gold); color: var(--navy);
-border-color: var(--gold);
-}
-.footer-col h4 {
-font-family: var(--font-display);
-font-size: 0.95rem; font-weight: 800;
-color: var(--white); margin-bottom: 18px;
-}
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 10px; }
-.footer-col ul li a {
-font-size: 0.84rem; color: rgba(255,255,255,0.5);
-transition: var(--transition);
-}
-.footer-col ul li a:hover { color: var(--gold); padding-left: 6px; }
-.footer-bottom {
-max-width: 1200px; margin: 0 auto;
-padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.07);
-display: flex; justify-content: space-between; align-items: center;
-flex-wrap: wrap; gap: 10px;
-font-size: 0.78rem; color: rgba(255,255,255,0.35);
-}
-.footer-bottom a { color: var(--gold); }
-@media(max-width:900px){
-.footer-grid { grid-template-columns: 1fr 1fr; }
-}
-@media(max-width:600px){
-.footer-grid { grid-template-columns: 1fr; }
-.hero-stats { display: none; }
-#lexiq-nav { padding: 0 16px; }
-section { padding: 60px 20px; }
-}
-
-/* Toast notification */
-.toast {
-position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
-background: var(--text-dark); color: var(--white);
-padding: 14px 28px; border-radius: 40px;
-font-size: 0.88rem; font-weight: 500;
-box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-z-index: 9999; opacity: 0; transition: var(--transition);
-white-space: nowrap;
-}
-.toast.active { opacity: 1; transform: translateX(-50%) translateY(0); }
-.toast.gold { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--navy); }
-.toast.red  { background: #dc2626; }
-
-/* Fade-in animation for content */
-@keyframes fadeSlideDown {
-from { opacity: 0; transform: translateY(-20px); }
-to   { opacity: 1; transform: translateY(0); }
-}
-.fade-in-up {
-opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.fade-in-up.visible { opacity: 1; transform: translateY(0); }
-
-/* GSI hidden button container — sits invisibly behind our button */
-#gsi-btn-container {
-position: absolute !important;
-opacity: 0 !important;
-pointer-events: none !important;
-width: 1px !important; height: 1px !important;
-overflow: hidden !important;
-z-index: -1;
-}
-
-/* Loading shimmer */
-.shimmer {
-background: linear-gradient(90deg, #e8edf8 25%, #f4f6fb 50%, #e8edf8 75%);
-background-size: 200% 100%;
-animation: shimmer 1.5s infinite;
-border-radius: 8px;
-}
-@keyframes shimmer { to { background-position: -200% 0; } }
 </style>
 </head>
 <body>
 
-
-<nav id='lexiq-nav'>
-<a class='nav-logo' href='index.html'>
-<div class='logo-badge'>L</div>
-LEX <span style='color:#fff;margin:0 2px;'>&#183;</span> IQ
-</a>
-<ul class='nav-links'>
-<li><a href='#quiz-sections'>Quizzes</a></li>
-<li><a href='#constitutional-parts'>Constitutional Law</a></li>
-<li><a href='#leaderboard-section'>Leaderboard</a></li>
-<li><a href='#how-it-works'>How It Works</a></li>
-<li><a href='#'>Contact</a></li>
-</ul>
-<div id='nav-user-area'>
-<div id='signin-nav-area'>
-<button class='btn-signin-nav' onclick='openSignInModal()'>Sign In with Google</button>
-</div>
-<div id='user-nav-area' style='display:none;align-items:center;gap:10px;'>
-<span class='user-name-nav' id='nav-display-name'/>
-<img alt='User' class='user-avatar' id='nav-avatar' onclick='openProfileModal()' src=''/>
-</div>
-</div>
-<button aria-label='Menu' class='nav-hamburger' onclick='toggleMobileMenu()'>
-<span/><span/><span/>
-</button>
+<!-- NAV -->
+<nav id="nav">
+  <a class="n-logo" href="/">
+    <div class="n-badge">L</div>
+    LEX <span style="color:rgba(255,255,255,.25);margin:0 8px;font-weight:300">·</span> IQ
+  </a>
+  <ul class="n-links">
+    <li><a href="#parts">Quizzes</a></li>
+    <li><a href="#lb">Leaderboard</a></li>
+  </ul>
+  <div id="n-auth">
+    <button id="btn-snav" onclick="openSignIn()">Sign In with Google</button>
+    <div id="n-user">
+      <span id="n-name" onclick="openProfile()"></span>
+      <img id="n-avatar" src="" alt="avatar" onclick="openProfile()"/>
+    </div>
+  </div>
 </nav>
 
-<section id='hero'>
-<div class='hero-bg-pattern'/>
-<div class='hero-particles' id='heroParticles'/>
-<div class='hero-circle hero-circle-1'/>
-<div class='hero-circle hero-circle-2'/>
-
-<div class='hero-content'>
-<div class='hero-badge'>India's Premier Legal Quiz Platform</div>
-<h1 class='hero-title'>
-<span class='lex'>LEX</span> <span class='iq'>IQ</span>
-</h1>
-<p class='hero-tagline'>Test &#183; Learn &#183; Dominate</p>
-<p class='hero-desc'>
-Master Indian Constitutional Law through adaptive quizzes,
-real-time leaderboards, and intelligent performance tracking.
-Built for law students, practitioners, and aspiring legal minds.
-</p>
-<div class='hero-cta'>
-<button class='btn-primary' onclick='startExploring()'>
-&#9878;&#65039; Start Quizzing Now
-</button>
-<button class='btn-outline' onclick='document.getElementById("how-it-works").scrollIntoView({behavior:"smooth"})'>
-&#9654; How It Works
-</button>
-</div>
-</div>
-
-<div class='scroll-hint'>
-<svg fill='none' height='18' stroke='currentColor' viewBox='0 0 24 24' width='18'>
-<path d='M19 9l-7 7-7-7' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/>
-</svg>
-scroll
-</div>
-
-<div class='hero-stats'>
-<div class='stat-item'>
-<div class='stat-number' id='stat-users'>0</div>
-<div class='stat-label'>Active Learners</div>
-</div>
-<div class='stat-item'>
-<div class='stat-number'>22</div>
-<div class='stat-label'>Constitution Parts</div>
-</div>
-<div class='stat-item'>
-<div class='stat-number'>500+</div>
-<div class='stat-label'>Quiz Questions</div>
-</div>
-<div class='stat-item'>
-<div class='stat-number'>Live</div>
-<div class='stat-label'>Leaderboards</div>
-</div>
-</div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-in">
+    <div class="h-pill"><span class="h-dot"></span>India's Premier Legal Quiz Platform</div>
+    <h1 class="h-title">Master the<br/><em>Indian Constitution</em></h1>
+    <p class="h-sub">22 Parts. 395 Articles. 3 difficulty levels. Test your constitutional knowledge and rise to the top of the leaderboard.</p>
+    <div class="h-cta">
+      <button class="btn-gold" onclick="startExploring()">⚖️ Start Quizzing</button>
+      <button class="btn-outline" onclick="document.getElementById('lb').scrollIntoView({behavior:'smooth'})">View Leaderboard</button>
+    </div>
+    <div class="h-stats">
+      <div><div class="h-snum">22</div><div class="h-slbl">Constitution Parts</div></div>
+      <div><div class="h-snum">395</div><div class="h-slbl">Articles Covered</div></div>
+      <div><div class="h-snum">3</div><div class="h-slbl">Difficulty Levels</div></div>
+    </div>
+  </div>
 </section>
 
-<section id='how-it-works'>
-<div style='max-width:1100px;margin:0 auto;'>
-<div class='center-text fade-in-up'>
-<div class='section-label'>Simple Process</div>
-<h2 class='section-title'>How LEX IQ Works</h2>
-<p class='section-sub'>From sign-in to the scoreboard &#8212; your journey to legal mastery in four steps.</p>
-</div>
-<div class='steps-grid'>
-<div class='step-card fade-in-up'>
-<div class='step-number'>01</div>
-<div class='step-icon'>🔐</div>
-<h3 class='step-title'>Sign In Securely</h3>
-<p class='step-text'>Use your Google account for one-click access. Your scores and progress are automatically saved across devices.</p>
-</div>
-<div class='step-card fade-in-up'>
-<div class='step-number'>02</div>
-<div class='step-icon'>📖</div>
-<h3 class='step-title'>Choose Your Topic</h3>
-<p class='step-text'>Select any Part of the Indian Constitution and set your difficulty level.</p>
-</div>
-<div class='step-card fade-in-up'>
-<div class='step-number'>03</div>
-<div class='step-icon'>&#9889;</div>
-<h3 class='step-title'>Take the Quiz</h3>
-<p class='step-text'>Answer timed questions with instant feedback. Detailed explanations help you learn, not just test.</p>
-</div>
-<div class='step-card fade-in-up'>
-<div class='step-number'>04</div>
-<div class='step-icon'>🏆</div>
-<h3 class='step-title'>Climb the Board</h3>
-<p class='step-text'>Your score and time are recorded in real-time. Compete with peers and track your improvement over time.</p>
-</div>
-</div>
-</div>
+<!-- PARTS -->
+<section id="parts">
+  <div class="inner">
+    <div id="ph">
+      <div>
+        <div class="slbl">Constitution of India</div>
+        <h2 class="stitle">Choose Your Part</h2>
+        <p class="ssub">Select any Part of the Constitution to begin a timed quiz.</p>
+      </div>
+      <input id="psearch" type="text" placeholder="🔍  Search parts…" oninput="filterParts(this.value)"/>
+    </div>
+    <div id="pgrid"></div>
+  </div>
 </section>
 
-<section id='quiz-sections'>
-<div style='max-width:1200px;margin:0 auto;'>
-<div class='fade-in-up'>
-<div class='section-label'>Quiz Library</div>
-<h2 class='section-title'>Explore Quiz Sections</h2>
-<p class='section-sub'>Dive deep into each branch of law. More sections launching soon.</p>
-</div>
-<div class='quiz-grid'>
-
-<div class='quiz-card fade-in-up' onclick='handleQuizSectionClick("constitutional")'>
-<div class='active-ribbon'>🔥 Live Now</div>
-<div class='quiz-card-banner'>
-<span class='card-emblem'>🏛&#65039;</span>
-</div>
-<div class='quiz-card-body'>
-<div class='quiz-card-category'>Public Law</div>
-<h3 class='quiz-card-title'>Constitutional Law</h3>
-<p class='quiz-card-desc'>Test your mastery of the Indian Constitution &#8212; from Fundamental Rights to Emergency Provisions &#8212; across 22 distinct Parts.</p>
-<div class='quiz-meta'>
-<span class='quiz-meta-badge'>📝 22 Parts</span>
-<span class='quiz-meta-badge'>&#9889; Adaptive</span>
-<span class='quiz-meta-badge'>🏆 Leaderboard</span>
-</div>
-<button class='btn-quiz-start'>Explore Parts &#8594;</button>
-</div>
-</div>
-
-<div class='quiz-card coming-soon fade-in-up'>
-<div class='coming-soon-ribbon'>Coming Soon</div>
-<div class='quiz-card-banner' style='background:linear-gradient(135deg,#2E3A59,#1a2640)'>
-<span class='card-emblem'>&#9878;&#65039;</span>
-</div>
-<div class='quiz-card-body'>
-<div class='quiz-card-category'>Criminal Law</div>
-<h3 class='quiz-card-title'>Criminal Law & IPC</h3>
-<p class='quiz-card-desc'>Indian Penal Code, Criminal Procedure, Evidence Act &#8212; comprehensive criminal law quizzes.</p>
-<div class='quiz-meta'>
-<span class='quiz-meta-badge'>📝 IPC, CrPC</span>
-</div>
-<button class='btn-quiz-start' disabled='disabled'>Coming Soon</button>
-</div>
-</div>
-
-<div class='quiz-card coming-soon fade-in-up'>
-<div class='coming-soon-ribbon'>Coming Soon</div>
-<div class='quiz-card-banner' style='background:linear-gradient(135deg,#2E3A59,#0d2240)'>
-<span class='card-emblem'>📜</span>
-</div>
-<div class='quiz-card-body'>
-<div class='quiz-card-category'>Civil Law</div>
-<h3 class='quiz-card-title'>Contract & Tort Law</h3>
-<p class='quiz-card-desc'>Indian Contract Act, SOGA, and tort law principles tested in-depth.</p>
-<div class='quiz-meta'>
-<span class='quiz-meta-badge'>📝 Contract Act</span>
-</div>
-<button class='btn-quiz-start' disabled='disabled'>Coming Soon</button>
-</div>
-</div>
-
-<div class='quiz-card coming-soon fade-in-up'>
-<div class='coming-soon-ribbon'>Coming Soon</div>
-<div class='quiz-card-banner' style='background:linear-gradient(135deg,#1a3050,#2E3A59)'>
-<span class='card-emblem'>🏢</span>
-</div>
-<div class='quiz-card-body'>
-<div class='quiz-card-category'>Corporate Law</div>
-<h3 class='quiz-card-title'>Company Law & SEBI</h3>
-<p class='quiz-card-desc'>Companies Act 2013, securities regulation, and corporate governance.</p>
-<div class='quiz-meta'>
-<span class='quiz-meta-badge'>📝 Companies Act</span>
-</div>
-<button class='btn-quiz-start' disabled='disabled'>Coming Soon</button>
-</div>
-</div>
-
-</div>
-</div>
+<!-- LEADERBOARD -->
+<section id="lb">
+  <div class="inner">
+    <div class="slbl">Rankings</div>
+    <h2 class="stitle">Leaderboard</h2>
+    <p class="ssub" style="margin-bottom:44px">Top scorers from every Part of the Constitution.</p>
+    <div class="lb-tabs" id="lbTabs"></div>
+    <div id="lbBody"><div class="lb-empty shimmer" style="height:180px;"></div></div>
+  </div>
 </section>
 
-<section id='constitutional-parts'>
-<div style='max-width:1200px;margin:0 auto;'>
-<div class='parts-header fade-in-up'>
-<div class='parts-header-text'>
-<div class='section-label'>Constitution of India</div>
-<h2 class='section-title'>All 22 Parts &#8212; Choose Your Challenge</h2>
-<p class='section-sub' style='margin-bottom:0'>Each Part covers specific Articles. Click any card to begin your quiz.</p>
-</div>
-<div class='parts-search'>
-<input id='partsSearchInput' oninput='filterParts(this.value)' placeholder='Search parts...' type='text'/>
-<svg class='parts-search-icon' fill='none' height='16' stroke='currentColor' viewBox='0 0 24 24' width='16'>
-<path d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/>
-</svg>
-</div>
-</div>
-<div class='parts-grid' id='partsGrid'/>
-</div>
-</section>
-
-<section id='features-strip'>
-<div style='max-width:1100px;margin:0 auto;'>
-<div class='center-text fade-in-up'>
-<div class='section-label'>Why LEX IQ</div>
-<h2 class='section-title'>Everything You Need to Excel</h2>
-<p class='section-sub'>Purpose-built for serious legal learners.</p>
-</div>
-<div class='features-grid'>
-<div class='feature-item fade-in-up'>
-<span class='feature-icon'>🎯</span>
-<h3 class='feature-title'>Adaptive Difficulty</h3>
-<p class='feature-text'>Easy, Medium, and Hard modes. Pick your challenge level for every Part of the Constitution.</p>
-</div>
-<div class='feature-item fade-in-up'>
-<span class='feature-icon'>&#9201;&#65039;</span>
-<h3 class='feature-title'>Timed Quizzes</h3>
-<p class='feature-text'>Every question is timed. Practice speed alongside accuracy &#8212; crucial for competitive exams.</p>
-</div>
-<div class='feature-item fade-in-up'>
-<span class='feature-icon'>📊</span>
-<h3 class='feature-title'>Progress Dashboard</h3>
-<p class='feature-text'>Track your scores, improvement trends, and quiz history across every topic you attempt.</p>
-</div>
-<div class='feature-item fade-in-up'>
-<span class='feature-icon'>🔄</span>
-<h3 class='feature-title'>Instant Explanations</h3>
-<p class='feature-text'>After every answer, get detailed explanations with Article references and case law citations.</p>
-</div>
-<div class='feature-item fade-in-up'>
-<span class='feature-icon'>🔒</span>
-<h3 class='feature-title'>Secure & Private</h3>
-<p class='feature-text'>Google Sign-In ensures secure access. Full control over your data &#8212; export or delete anytime.</p>
-</div>
-<div class='feature-item fade-in-up'>
-<span class='feature-icon'>📱</span>
-<h3 class='feature-title'>Mobile Ready</h3>
-<p class='feature-text'>Fully responsive design. Study on the go from any device without losing your progress.</p>
-</div>
-</div>
-</div>
-</section>
-
-<section id='leaderboard-section'>
-<div style='max-width:1000px;margin:0 auto;'>
-<div class='center-text fade-in-up'>
-<div class='section-label'>Real-Time Rankings</div>
-<h2 class='section-title' style='color:#fff;'>Live Leaderboard</h2>
-<p class='section-sub' style='color:rgba(255,255,255,0.6);'>
-Updated instantly after every quiz. See where you stand.
-</p>
-</div>
-<div class='leaderboard-tabs fade-in-up' id='lbTabs'/>
-<div class='leaderboard-table fade-in-up'>
-<div class='lb-header'>
-<div>Rank</div>
-<div>Player</div>
-<div>Time Taken</div>
-<div>Score</div>
-</div>
-<div id='lbBody'><div class='lb-empty shimmer' style='height:200px;'/></div>
-</div>
-</div>
-</section>
-
-<section id='testimonials'>
-<div style='max-width:1100px;margin:0 auto;'>
-<div class='center-text fade-in-up'>
-<div class='section-label'>From Our Community</div>
-<h2 class='section-title'>What Learners Say</h2>
-<p class='section-sub'>Trusted by law students, graduates, and practitioners across India.</p>
-</div>
-<div class='testi-grid'>
-<div class='testi-card fade-in-up'>
-<div class='stars'>&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-<div class='testi-quote'>"</div>
-<p class='testi-text'>The Part III quiz helped me crack my Constitutional Law viva.
-The explanations are thorough and the difficulty progression is spot-on.</p>
-<div class='testi-user'>
-<div class='testi-avatar'>R</div>
-<div>
-<div class='testi-name'>Rahul Sharma</div>
-<div class='testi-role'>3rd Year, NLU Delhi</div>
-</div>
-</div>
-</div>
-<div class='testi-card fade-in-up'>
-<div class='stars'>&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-<div class='testi-quote'>"</div>
-<p class='testi-text'/>
-<div class='testi-user'>
-<div class='testi-avatar'>Y</div>
-<div>
-<div class='testi-name'/>
-<div class='testi-role'/>
-</div>
-</div>
-</div>
-<div class='testi-card fade-in-up'>
-<div class='stars'>&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-<div class='testi-quote'>"</div>
-<p class='testi-text'>I use LEX IQ to brush up before client meetings.
-The Emergency Provisions section is excellent and questions are very case-relevant.</p>
-<div class='testi-user'>
-<div class='testi-avatar'>A</div>
-<div>
-<div class='testi-name'>Advocate Arun Pillai</div>
-<div class='testi-role'>Practising Lawyer, Mumbai</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-
+<!-- FOOTER -->
 <footer>
-<div class='footer-grid'>
-<div class='footer-brand'>
-<div class='nav-logo'>
-<div class='logo-badge'>L</div>
-LEX IQ
-</div>
-<p>India's premier legal quiz platform. Sharpen your legal mind, one question at a time. Built with &#10084;&#65039;
-for the legal community.</p>
-<div class='footer-social'>
-<a aria-label='Instagram' class='social-icon' href='https://www.instagram.com/lexiqquiz/' target='_blank'>
-<svg fill='currentColor' height='17' viewBox='0 0 24 24' width='17'>
-<path d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'/>
-</svg>
-</a>
-</div>
-</div>
-<div class='footer-col'>
-<h4>Quizzes</h4>
-<ul>
-<li><a href='#constitutional-parts'>Constitutional Law</a></li>
-<li><a href='#quiz-sections'>Criminal Law (Soon)</a></li>
-<li><a href='#quiz-sections'>Contract Law (Soon)</a></li>
-<li><a href='#quiz-sections'>Company Law (Soon)</a></li>
-</ul>
-</div>
-<div class='footer-col'>
-<h4>Platform</h4>
-<ul>
-<li><a href='#leaderboard-section'>Leaderboard</a></li>
-<li><a href='#how-it-works'>How It Works</a></li>
-<li><a href='#features-strip'>Features</a></li>
-<li><a href='javascript:void(0)' onclick='openProfileModal()'>My Profile</a></li>
-</ul>
-</div>
-<div class='footer-col'>
-<h4>Legal</h4>
-<ul>
-<li><a href='#'>Privacy Policy</a></li>
-<li><a href='#'>Terms of Service</a></li>
-<li><a href='#'>Disclaimer</a></li>
-<li><a href='#'>Contact Us</a></li>
-</ul>
-</div>
-</div>
-<div class='footer-bottom'>
-<span>&#169; 2025 LEX IQ. All rights reserved.</span>
-<span>Made with &#9878;&#65039; for India's legal community &#183; <a href='https://www.instagram.com/lexiqquiz/' target='_blank'>@lexiqquiz</a></span>
-</div>
+  <div class="ft-logo">⚖️ LEX IQ</div>
+  <p class="ft-copy">© 2025 LEX IQ · For educational purposes only · All constitutional provisions sourced from official Government of India publications.</p>
 </footer>
 
-<div class='modal-overlay' id='signinModal'>
-<div class='modal-box'>
-<div class='modal-header'>
-<button class='modal-close' onclick='closeModal("signinModal")'>&#10005;</button>
-<h2>🔐 Sign In to LEX IQ</h2>
-<p>Your scores and progress will be saved automatically.</p>
-</div>
-<div class='modal-body'>
-<div class='modal-benefit'>
-<div class='modal-benefit-icon'>🏆</div>
-<div>Appear on the live leaderboard and track your rankings across all quiz sections.</div>
-</div>
-<div class='modal-benefit'>
-<div class='modal-benefit-icon'>📊</div>
-<div>View your full quiz history, score trends, and improvement analytics.</div>
-</div>
-<div class='modal-benefit'>
-<div class='modal-benefit-icon'>&#9729;&#65039;</div>
-<div>Progress synced across all your devices &#8212; phone, tablet, and desktop.</div>
-</div>
-<div class='modal-divider'>Sign in with</div>
-<div id='gsi-btn-container' style='position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden;'/>
+<!-- TOAST -->
+<div id="toast"><div class="ti" id="ti"></div></div>
 
-<div style='position:relative;'>
-<button class='google-signin-btn' id='customGoogleBtn' onclick='initiateGoogleSignIn()' type='button'>
-<svg class='google-icon' viewBox='0 0 24 24'>
-<path d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z' fill='#4285F4'/>
-<path d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z' fill='#34A853'/>
-<path d='M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z' fill='#FBBC05'/>
-<path d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z' fill='#EA4335'/>
-</svg>
-Continue with Google
-</button>
-</div>
-<p class='modal-privacy'>
-By signing in, you agree to our <a href='#'>Privacy Policy</a>
-and <a href='#'>Terms of Service</a>.
-We only access your name, email, and profile picture.
-</p>
-</div>
-</div>
+<!-- SIGN IN MODAL -->
+<div class="moverlay" id="mSignin">
+  <div class="mbox" style="max-width:420px;">
+    <div class="mhead"><div></div><button class="mclose" onclick="closeModal('mSignin')">✕</button></div>
+    <div class="mbody">
+      <div class="si-brand">
+        <div class="si-logo">⚖️ LEX IQ</div>
+        <p class="si-tag">Sign in to track your scores and appear<br/>on the national leaderboard.</p>
+      </div>
+      <div class="si-gsi"><div id="gsi-btn"></div></div>
+      <p class="si-note">By signing in you agree to our Terms of Service.<br/>Your quiz history is private by default.</p>
+    </div>
+  </div>
 </div>
 
-<div class='modal-overlay' id='quizConfigModal'>
-<div class='modal-box'>
-<div class='modal-header' id='quizConfigHeader'>
-<button class='modal-close' onclick='closeModal("quizConfigModal")'>&#10005;</button>
-<h2 id='quizConfigTitle'>Configure Your Quiz</h2>
-<p id='quizConfigSubtitle'>Customise your quiz session</p>
-</div>
-<div class='modal-body'>
-<div class='config-field'>
-<label class='config-label'>Difficulty Level</label>
-<div class='difficulty-btns'>
-<button class='diff-btn easy' onclick='selectDifficulty("easy",this)'>🟢 Easy</button>
-<button class='diff-btn medium selected' onclick='selectDifficulty("medium",this)'>🟡 Medium</button>
-<button class='diff-btn hard' onclick='selectDifficulty("hard",this)'>🔴 Hard</button>
-</div>
-</div>
-<div class='config-field' id='qCountField' style='display:none;'>
-<label class='config-label'>Number of Questions: <span id='qCountDisplay'>20</span></label>
-<div class='range-wrapper'>
-<input id='qCountRange' max='50' min='10' oninput='updateQCount(this)' style='--pct:20%' type='range' value='20'/>
-<span class='range-val' id='qCountVal'>20</span>
-</div>
-</div>
-<button class='btn-start-quiz' onclick='launchQuiz()'>
-&#9878;&#65039; Start Quiz Now
-</button>
-</div>
-</div>
+<!-- QUIZ CONFIG MODAL -->
+<div class="moverlay" id="mQuiz">
+  <div class="mbox">
+    <div class="mhead">
+      <div>
+        <div class="mtitle" id="qmTitle">Part III — Quiz</div>
+        <div class="msub" id="qmSub">Fundamental Rights</div>
+      </div>
+      <button class="mclose" onclick="closeModal('mQuiz')">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="mdivider"></div>
+      <p style="font-size:.76rem;color:var(--tx3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;font-weight:600;">Select Difficulty</p>
+      <div class="diff-grid">
+        <button class="dbtn" data-d="easy" onclick="setDiff(this)"><span class="dicon">🌱</span>Easy</button>
+        <button class="dbtn on" data-d="medium" onclick="setDiff(this)"><span class="dicon">⚖️</span>Medium</button>
+        <button class="dbtn" data-d="hard" onclick="setDiff(this)"><span class="dicon">🔥</span>Hard</button>
+      </div>
+      <button class="btn-start" onclick="launchQuiz()">Start Quiz →</button>
+    </div>
+  </div>
 </div>
 
-<div class='modal-overlay' id='profileModal'>
-<div class='modal-box'>
-<div class='modal-header'>
-<button class='modal-close' onclick='closeModal("profileModal")'>&#10005;</button>
-<h2>👤 My Profile</h2>
-<p>Manage your account and privacy settings.</p>
+<!-- PROFILE MODAL -->
+<div class="moverlay" id="mProfile">
+  <div class="mbox">
+    <div class="mhead">
+      <div class="mtitle">My Profile</div>
+      <button class="mclose" onclick="closeModal('mProfile')">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="prof-h">
+        <img class="prof-pic" id="profPic" src="" alt=""/>
+        <div class="prof-name" id="profName"></div>
+        <div class="prof-email" id="profEmail"></div>
+      </div>
+      <div class="prof-stats">
+        <div class="ps-box"><div class="ps-num" id="ps-q">0</div><div class="ps-lbl">Quizzes</div></div>
+        <div class="ps-box"><div class="ps-num" id="ps-a">—</div><div class="ps-lbl">Avg Score</div></div>
+        <div class="ps-box"><div class="ps-num" id="ps-r">—</div><div class="ps-lbl">Best Rank</div></div>
+      </div>
+      <div class="mdivider"></div>
+      <p style="font-size:.74rem;color:var(--tx3);text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:4px;">Privacy Settings</p>
+      <div class="priv-row">
+        <div><div class="priv-lbl">Leaderboard Visibility</div><div class="priv-desc">Show my name on public rankings</div></div>
+        <label class="tog"><input type="checkbox" id="togLb" onchange="updatePrivacy('leaderboard',this.checked)"/><div class="tog-track"></div></label>
+      </div>
+      <div class="priv-row">
+        <div><div class="priv-lbl">Save Quiz History</div><div class="priv-desc">Keep a record of my attempts</div></div>
+        <label class="tog"><input type="checkbox" id="togHist" onchange="updatePrivacy('history',this.checked)"/><div class="tog-track"></div></label>
+      </div>
+      <div class="mdivider"></div>
+      <div class="prof-btns">
+        <button class="btn-so" onclick="signOut()">Sign Out</button>
+        <button class="btn-del" onclick="deleteAccount()">Delete Account</button>
+      </div>
+    </div>
+  </div>
 </div>
-<div class='modal-body'>
-<img alt='' class='profile-avatar-big' id='profileAvatar' src=''/>
-<div class='profile-name-big' id='profileName'>-</div>
-<div class='profile-email' id='profileEmail'>-</div>
-<div class='profile-stats-row' id='profileStats'>
-<div class='profile-stat-box'>
-<div class='profile-stat-num' id='pstat-quizzes'>0</div>
-<div class='profile-stat-lbl'>Quizzes</div>
-</div>
-<div class='profile-stat-box'>
-<div class='profile-stat-num' id='pstat-avg'>&#8212;</div>
-<div class='profile-stat-lbl'>Avg Score</div>
-</div>
-<div class='profile-stat-box'>
-<div class='profile-stat-num' id='pstat-rank'>#&#8212;</div>
-<div class='profile-stat-lbl'>Best Rank</div>
-</div>
-</div>
-<div class='privacy-toggles'>
-<p style='font-size:0.8rem;font-weight:700;color:#0d1b3e;margin-bottom:14px;'>Privacy Controls</p>
-<div class='privacy-toggle-row'>
-<span class='privacy-toggle-label'>Show on Leaderboard</span>
-<label class='toggle-switch'>
-<input checked='checked' id='toggleLeaderboard' onchange='savePrivacySetting("leaderboard",this.checked)' type='checkbox'/>
-<span class='toggle-slider'/>
-</label>
-</div>
-<div class='privacy-toggle-row'>
-<span class='privacy-toggle-label'>Share Quiz History</span>
-<label class='toggle-switch'>
-<input id='toggleHistory' onchange='savePrivacySetting("history",this.checked)' type='checkbox'/>
-<span class='toggle-slider'/>
-</label>
-</div>
-<div class='privacy-toggle-row'>
-<span class='privacy-toggle-label'>Analytics & Performance Data</span>
-<label class='toggle-switch'>
-<input checked='checked' id='toggleAnalytics' onchange='savePrivacySetting("analytics",this.checked)' type='checkbox'/>
-<span class='toggle-slider'/>
-</label>
-</div>
-</div>
-<div class='profile-actions' style='margin-top:22px;'>
-<button class='btn-signout' onclick='signOutUser()'>
-<svg fill='none' height='16' stroke='currentColor' viewBox='0 0 24 24' width='16'><path d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/></svg>
-Sign Out
-</button>
-<button class='btn-delete-account' onclick='confirmDeleteAccount()'>
-<svg fill='none' height='16' stroke='currentColor' viewBox='0 0 24 24' width='16'><path d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/></svg>
-Delete My Account
-</button>
-</div>
-</div>
-</div>
-</div>
-
-<div class='toast' id='toastMsg'/>
-
-<script>//<![CDATA[
-/* ─────────────────────────────────────────────
-CONSTANTS
-───────────────────────────────────────────── */
-const GOOGLE_CLIENT_ID = '305545954226-dd79hqj2lnatubnhqmfvaou0e4h1sr9q.apps.googleusercontent.com';
-const USERS_API_URL = 'https://script.google.com/macros/s/AKfycby178Yk472WRIuAeeqYZ60VY-VMKDPzfNxI25cml17gdFbFjpouiR1whHZV-LvUJnhQ/exec';
-const ARENA_API_URL = 'https://script.google.com/macros/s/AKfycbwl7ysCcl33S2BTr3h_pdxFHW63s0_bJGta-Xf_0HCF5SR6HvVPRkQZt4oIyLSQbohM/exec';
-
-/* ─────────────────────────────────────────────
-CONSTITUTION PARTS DATA
-───────────────────────────────────────────── */
-const CONSTITUTION_PARTS = [
-{ id:'I',    title:'The Union and Its Territory', articles:'1–4',   topics:['State formation','Territory','Admission of States'], maxQ:10 },
-{ id:'II',   title:'Citizenship',                  articles:'5–11',  topics:['Citizenship at commencement','Overseas citizenship','Renunciation'], maxQ:15 },
-{ id:'III',  title:'Fundamental Rights',           articles:'12–35', topics:['Right to Equality','Right to Freedom','Right against Exploitation','Cultural Rights','Right to Constitutional Remedies'], maxQ:100 },
-{ id:'IV',   title:'Directive Principles of State Policy', articles:'36–51', topics:['DPSP','Welfare State','International Peace'], maxQ:60 },
-{ id:'IVA',  title:'Fundamental Duties',           articles:'51A',   topics:['11 Duties','Constitutional Obligations'], maxQ:10 },
-{ id:'V',    title:'The Union Government',         articles:'52–151', topics:['President','Vice-President','Parliament','Council of Ministers','Supreme Court','CAG'], maxQ:100 },
-{ id:'VI',   title:'The States',                   articles:'152–237', topics:['Governor','State Legislature','High Courts','Subordinate Courts','State Executives'], maxQ:100 },
-{ id:'VIII', title:'The Union Territories',        articles:'239–242', topics:['Administration of UTs','Special provisions for Delhi'], maxQ:10 },
-{ id:'IX',   title:'The Panchayats',               articles:'243–243O', topics:['73rd Amendment','Gram Sabha','Gram Panchayat','Panchayati Raj'], maxQ:30 },
-{ id:'IXA',  title:'The Municipalities',           articles:'243P–243ZG', topics:['74th Amendment','Municipal Corporations','Urban Local Bodies'], maxQ:25 },
-{ id:'IXB',  title:'Co-operative Societies',       articles:'243ZH–243ZT', topics:['97th Amendment','Multi-State Co-operatives'], maxQ:15 },
-{ id:'X',    title:'Scheduled and Tribal Areas',   articles:'244–244A', topics:['5th Schedule','6th Schedule','Tribal Autonomy'], maxQ:15 },
-{ id:'XI',   title:'Union–State Relations',        articles:'245–263', topics:['Legislative Relations','Administrative Relations','Financial Relations','Inter-State Council'], maxQ:50 },
-{ id:'XII',  title:'Finance, Property, Contracts', articles:'264–300A', topics:['Finance Commission','Grants','Right to Property','Consolidated Fund'], maxQ:60 },
-{ id:'XIII', title:'Trade, Commerce and Intercourse', articles:'301–307', topics:['Freedom of Trade','Trade Regulations','Restrictions'], maxQ:15 },
-{ id:'XIV',  title:'Services under Union and States', articles:'308–323', topics:['All India Services','UPSC','SPSC','Public Service Commissions'], maxQ:25 },
-{ id:'XIVA', title:'Tribunals',                    articles:'323A–323B', topics:['Administrative Tribunals','42nd Amendment'], maxQ:10 },
-{ id:'XV',   title:'Elections',                    articles:'324–329A', topics:['Election Commission','Delimitation','Reservation of Seats'], maxQ:30 },
-{ id:'XVI',  title:'Special Provisions for Certain Classes', articles:'330–342', topics:['SC/ST Reservations','Anglo-Indians','OBCs'], maxQ:30 },
-{ id:'XVII', title:'Official Language',            articles:'343–351', topics:['Hindi','English','Classical Languages','8th Schedule'], maxQ:20 },
-{ id:'XVIII',title:'Emergency Provisions',         articles:'352–360', topics:['National Emergency','President\'s Rule','Financial Emergency'], maxQ:40 },
-{ id:'XIX',  title:'Miscellaneous',                articles:'361–367', topics:['Presidential Immunity','Interpretation','Special Courts'], maxQ:15 },
-{ id:'XX',   title:'Amendment of the Constitution', articles:'368',  topics:['Constitutional Amendment','Basic Structure Doctrine'], maxQ:10 },
-{ id:'XXI',  title:'Temporary and Transitional Provisions', articles:'369–392', topics:['Transitional Provisions','J&K','Special Status'], maxQ:20 },
-{ id:'XXII', title:'Short Title, Commencement and Repeals', articles:'393–395', topics:['Commencement','Repeal of Acts'], maxQ:10 }
-];
-
-/* ─────────────────────────────────────────────
-APP STATE
-───────────────────────────────────────────── */
-let currentUser    = null;
-let selectedPart   = null;
-let selectedDiff   = 'medium';
-let selectedQCount = 20;
-let leaderboardCache = {};
-let activeLbPart   = null;
-
-/* ─────────────────────────────────────────────
-GOOGLE SIGN-IN
-───────────────────────────────────────────── */
-function initGoogleSignIn() {
-google.accounts.id.initialize({
-client_id: GOOGLE_CLIENT_ID,
-callback: handleGoogleCredential,
-auto_select: false,
-cancel_on_tap_outside: true,
-ux_mode: 'popup'
-});
-google.accounts.id.renderButton(
-document.getElementById('gsi-btn-container'),
-{ theme: 'outline', size: 'large', width: 380, text: 'signin_with' }
-);
-window._googleReady = true;
-}
-
-window.addEventListener('load', () => {
-renderParts(CONSTITUTION_PARTS);
-setupScrollEffects();
-spawnParticles();
-animateStatCounter();
-loadLeaderboardTabs();
-restoreSession();
-});
-
-function initiateGoogleSignIn() {
-if (!window._googleReady || !window.google) {
-const oauthURL = 'https://accounts.google.com/o/oauth2/v2/auth'
-+ '?client_id=' + encodeURIComponent(GOOGLE_CLIENT_ID)
-+ '&redirect_uri=' + encodeURIComponent(window.location.origin + window.location.pathname)
-+ '&response_type=token'
-+ '&scope=' + encodeURIComponent('openid email profile')
-+ '&prompt=select_account';
-window.open(oauthURL, 'google_signin', 'width=500,height=600,left=200,top=100');
-return;
-}
-const btn = document.querySelector('#gsi-btn-container iframe');
-if (btn) {
-btn.contentWindow.document.querySelector('[role=button]')?.click();
-return;
-}
-google.accounts.id.prompt((notification) => {
-if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-openOAuthPopup();
-}
-});
-}
-
-function openOAuthPopup() {
-const params = new URLSearchParams({
-client_id:     GOOGLE_CLIENT_ID,
-redirect_uri:  window.location.origin + '/oauth2callback',
-response_type: 'code',
-scope:         'openid email profile',
-prompt:        'select_account'
-});
-const popup = window.open(
-'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString(),
-'LexIQ_GoogleSignIn',
-'width=500,height=600,scrollbars=yes,resizable=yes,left=' +
-Math.round((screen.width-500)/2) + ',top=' + Math.round((screen.height-600)/2)
-);
-if (!popup) showToast('Popup blocked. Please allow popups for this site.', 'red');
-}
-
-function handleGoogleCredential(response) {
-try {
-const payload = parseJwt(response.credential);
-currentUser = {
-id:      payload.sub,
-name:    payload.name,
-email:   payload.email,
-picture: payload.picture,
-token:   response.credential,
-privacyLeaderboard: true,
-privacyHistory:     false,
-privacyAnalytics:   true
-};
-localStorage.setItem('lexiq_user', JSON.stringify(currentUser));
-onUserSignedIn();
-closeModal('signinModal');
-showToast('Welcome, ' + currentUser.name.split(' ')[0] + '!', 'gold');
-registerUserToSheets(currentUser);
-
-const pending = sessionStorage.getItem('pendingQuizPart');
-if (pending) {
-sessionStorage.removeItem('pendingQuizPart');
-setTimeout(() => openQuizConfig(pending), 600);
-}
-} catch(e) {
-console.error('Sign-in error:', e);
-showToast('Sign-in failed. Please try again.', 'red');
-}
-}
-
-function parseJwt(token) {
-const base64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-return JSON.parse(decodeURIComponent(atob(base64).split('').map(c =>
-'%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
-}
-
-function onUserSignedIn() {
-document.getElementById('signin-nav-area').style.display  = 'none';
-document.getElementById('user-nav-area').style.display    = 'flex';
-document.getElementById('nav-display-name').textContent   = currentUser.name.split(' ')[0];
-document.getElementById('nav-avatar').src                 = currentUser.picture;
-document.getElementById('profileAvatar').src  = currentUser.picture;
-document.getElementById('profileName').textContent  = currentUser.name;
-document.getElementById('profileEmail').textContent = currentUser.email;
-document.getElementById('toggleLeaderboard').checked = currentUser.privacyLeaderboard !== false;
-document.getElementById('toggleHistory').checked     = currentUser.privacyHistory     === true;
-document.getElementById('toggleAnalytics').checked   = currentUser.privacyAnalytics   !== false;
-fetchUserStats();
-loadLeaderboard(activeLbPart || CONSTITUTION_PARTS[2].id); 
-}
-
-function restoreSession() {
-const stored = localStorage.getItem('lexiq_user');
-if (stored) {
-try {
-currentUser = JSON.parse(stored);
-onUserSignedIn();
-registerUserToSheets(currentUser);
-const pending = sessionStorage.getItem('pendingQuizPart');
-if (pending) {
-sessionStorage.removeItem('pendingQuizPart');
-setTimeout(() => openQuizConfig(pending), 600);
-}
-} catch(e) { localStorage.removeItem('lexiq_user'); }
-}
-}
-
-/* ─────────────────────────────────────────────
-GOOGLE SHEETS BACKEND (DUAL ROUTING)
-───────────────────────────────────────────── */
-function apiFetch(url, action, data) {
-const params = new URLSearchParams({ action, ...data });
-return fetch(url + '?' + params.toString(), { method:'GET' }).then(r => r.json()).catch(() => null);
-}
-
-function apiPost(url, action, data) {
-return fetch(url, {
-method: 'POST',
-headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-body: JSON.stringify({ action, ...data })
-}).then(r => r.json()).catch(err => {
-console.error('Fetch error:', err);
-return null;
-});
-}
-
-function registerUserToSheets(user) {
-apiPost(USERS_API_URL, 'register_user', {
-userId:  user.id,
-name:    user.name,
-email:   user.email,
-picture: user.picture
-});
-}
-
-function fetchUserStats() {
-if (!currentUser) return;
-apiFetch(ARENA_API_URL, 'get_user_stats', { userId: currentUser.id }).then(data => {
-if (data && data.stats) {
-document.getElementById('pstat-quizzes').textContent = data.stats.totalQuizzes || 0;
-document.getElementById('pstat-avg').textContent     = data.stats.avgScore ? data.stats.avgScore + '%' : '—';
-document.getElementById('pstat-rank').textContent    = data.stats.bestRank ? '#' + data.stats.bestRank : '#—';
-if (data.stats.totalUsers) animateCounter('stat-users', parseInt(data.stats.totalUsers));
-}
-});
-}
-
-function loadLeaderboard(partId) {
-activeLbPart = partId;
-document.getElementById('lbBody').innerHTML = '<div class="lb-empty shimmer" style="height:200px;"></div>';
-apiFetch(ARENA_API_URL, 'get_leaderboard', { partId }).then(data => {
-if (!data || !data.rows || data.rows.length === 0) {
-document.getElementById('lbBody').innerHTML = '<div class="lb-empty">🏆 No entries yet. Be the first to take this quiz!</div>';
-return;
-}
-renderLeaderboard(data.rows);
-}).catch(() => {
-document.getElementById('lbBody').innerHTML = '<div class="lb-empty">Unable to load leaderboard right now.</div>';
-});
-document.querySelectorAll('.lb-tab').forEach(t => {
-t.classList.toggle('active', t.dataset.part === partId);
-});
-}
-
-function renderLeaderboard(rows) {
-const medals = ['🥇','🥈','🥉'];
-const rankClasses = ['gold-rank','silver-rank','bronze-rank'];
-document.getElementById('lbBody').innerHTML = rows.slice(0,10).map((row,i) => {
-const initial = (row.name||'?')[0].toUpperCase();
-const avatarHtml = row.picture
-? `<img src="${row.picture}" alt="${row.name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`
-: initial;
-return `
-<div class="lb-row">
-<div class="lb-rank ${rankClasses[i]||''}">${medals[i]||i+1}</div>
-<div class="lb-user">
-<div class="lb-avatar">${avatarHtml}</div>
-<div class="lb-name">${escHtml(row.name||'Anonymous')}</div>
-</div>
-<div class="lb-time">${formatTime(row.timeTaken)}</div>
-<div class="lb-score">${row.score}%</div>
-</div>`;
-}).join('');
-}
-
-function deleteUserData() {
-apiPost(ARENA_API_URL, 'delete_user', { userId: currentUser.id, email: currentUser.email });
-return apiPost(USERS_API_URL, 'delete_user', { userId: currentUser.id, email: currentUser.email });
-}
-
-/* ─────────────────────────────────────────────
-PARTS RENDERING
-───────────────────────────────────────────── */
-function renderParts(parts) {
-const grid = document.getElementById('partsGrid');
-if (!grid) return;
-grid.innerHTML = parts.map(p => `
-<div class="part-card fade-in-up" onclick="openQuizConfig('${p.id}')">
-<div class="part-num">${p.id}</div>
-<div class="part-tag">Part ${p.id}</div>
-<h3 class="part-title">${escHtml(p.title)}</h3>
-<p class="part-articles">Articles ${p.articles}</p>
-<div class="part-topics">
-${p.topics.slice(0,3).map(t => `<span class="topic-chip">${escHtml(t)}</span>`).join('')}
-${p.topics.length > 3 ? `<span class="topic-chip">+${p.topics.length-3} more</span>` : ''}
-</div>
-<button class="btn-start-part" onclick="event.stopPropagation();openQuizConfig('${p.id}')">
-Start Quiz →
-</button>
-</div>`).join('');
-setTimeout(() => {
-grid.querySelectorAll('.fade-in-up').forEach((el,i) => {
-setTimeout(() => el.classList.add('visible'), i * 60);
-});
-}, 100);
-}
-
-function filterParts(query) {
-const q = query.toLowerCase();
-const filtered = CONSTITUTION_PARTS.filter(p =>
-p.title.toLowerCase().includes(q) ||
-p.id.toLowerCase().includes(q) ||
-p.topics.some(t => t.toLowerCase().includes(q)) ||
-p.articles.toLowerCase().includes(q)
-);
-renderParts(filtered);
-}
-
-/* ─────────────────────────────────────────────
-QUIZ FLOW
-───────────────────────────────────────────── */
-function handleQuizSectionClick(section) {
-if (section === 'constitutional') {
-document.getElementById('constitutional-parts').scrollIntoView({ behavior:'smooth' });
-}
-}
-
-function openQuizConfig(partId) {
-if (!currentUser) {
-showToast('Please sign in to start a quiz.','');
-openSignInModal();
-sessionStorage.setItem('pendingQuizPart', partId);
-return;
-}
-const part = CONSTITUTION_PARTS.find(p => p.id === partId);
-if (!part) return;
-selectedPart = part;
-selectedDiff = 'medium';
-
-document.getElementById('quizConfigTitle').textContent = 'Part ' + part.id + ' Quiz';
-document.getElementById('quizConfigSubtitle').textContent = part.title;
-
-// Slider hidden as requested
-document.getElementById('qCountField').style.display = 'none';
-
-document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
-document.querySelector('.diff-btn.medium').classList.add('selected');
-
-openModal('quizConfigModal');
-}
-
-function selectDifficulty(diff, btn) {
-selectedDiff = diff;
-document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
-btn.classList.add('selected');
-}
-
-function launchQuiz() {
-if (!selectedPart) return;
-closeModal('quizConfigModal');
-
-// Redirecting to correct Blogger page
-const url = 'quiz.html';
-
-sessionStorage.setItem('lexiq_quiz_config', JSON.stringify({
-partId:     selectedPart.id,
-partTitle:  selectedPart.title,
-difficulty: selectedDiff,
-count:      selectedPart.maxQ, // Automatically pull maximum questions
-userId:     currentUser.id,
-userName:   currentUser.name,
-userPic:    currentUser.picture
-}));
-window.location.href = url;
-}
-
-/* ─────────────────────────────────────────────
-LEADERBOARD TABS
-───────────────────────────────────────────── */
-function loadLeaderboardTabs() {
-const popularParts = ['III','V','VI','XVIII','XV','IV'];
-const tabs = document.getElementById('lbTabs');
-tabs.innerHTML = popularParts.map(id => {
-const p = CONSTITUTION_PARTS.find(x => x.id === id);
-return `<button class="lb-tab" data-part="${id}" onclick="loadLeaderboard('${id}')">
-Part ${id}
-</button>`;
-}).join('');
-activeLbPart = 'III';
-document.querySelectorAll('.lb-tab')[0]?.classList.add('active');
-loadLeaderboard('III');
-}
-
-/* ─────────────────────────────────────────────
-PROFILE & AUTH
-───────────────────────────────────────────── */
-function openProfileModal() {
-if (!currentUser) { openSignInModal(); return; }
-openModal('profileModal');
-}
-
-function signOutUser() {
-if (window.google) google.accounts.id.disableAutoSelect();
-currentUser = null;
-localStorage.removeItem('lexiq_user');
-closeModal('profileModal');
-document.getElementById('signin-nav-area').style.display = 'flex';
-document.getElementById('user-nav-area').style.display   = 'none';
-showToast('Signed out successfully.');
-}
-
-function confirmDeleteAccount() {
-const confirmed = confirm(
-'⚠️ Permanently delete your LEX IQ account?\n\n' +
-'This will remove ALL your quiz history, scores, and leaderboard entries. This action CANNOT be undone.'
-);
-if (!confirmed) return;
-showToast('Deleting your account...', '');
-deleteUserData().then(res => {
-signOutUser();
-showToast('Account deleted. We\'re sorry to see you go.', 'red');
-}).catch(() => {
-showToast('Deletion failed. Please contact support.', 'red');
-});
-}
-
-function savePrivacySetting(key, value) {
-if (!currentUser) return;
-if (key === 'leaderboard') currentUser.privacyLeaderboard = value;
-if (key === 'history')     currentUser.privacyHistory     = value;
-if (key === 'analytics')   currentUser.privacyAnalytics   = value;
-localStorage.setItem('lexiq_user', JSON.stringify(currentUser));
-apiPost(USERS_API_URL, 'update_privacy', { userId: currentUser.id, key, value });
-showToast('Privacy settings saved.', 'gold');
-}
-
-/* ─────────────────────────────────────────────
-MODAL HELPERS
-───────────────────────────────────────────── */
-function openModal(id)  { document.getElementById(id).classList.add('active'); document.body.style.overflow='hidden'; }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow=''; }
-function openSignInModal() { openModal('signinModal'); }
-
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(overlay.id); });
-});
-
-/* ─────────────────────────────────────────────
-TOAST
-───────────────────────────────────────────── */
-let toastTimer = null;
-function showToast(msg, type='') {
-const t = document.getElementById('toastMsg');
-t.textContent = msg;
-t.className = 'toast' + (type ? ' ' + type : '') + ' active';
-clearTimeout(toastTimer);
-toastTimer = setTimeout(() => t.classList.remove('active'), 3500);
-}
-
-/* ─────────────────────────────────────────────
-UI UTILITIES
-───────────────────────────────────────────── */
-function startExploring() {
-if (!currentUser) { openSignInModal(); return; }
-document.getElementById('constitutional-parts').scrollIntoView({ behavior:'smooth' });
-}
-
-function toggleMobileMenu() {
-const links = document.querySelector('.nav-links');
-if (links.style.display === 'flex') {
-links.style.display = 'none';
-} else {
-links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(11,61,145,0.97);padding:16px 20px;gap:4px;';
-}
-}
-
-function setupScrollEffects() {
-const nav = document.getElementById('lexiq-nav');
-window.addEventListener('scroll', () => {
-nav.classList.toggle('scrolled', window.scrollY > 40);
-});
-const obs = new IntersectionObserver((entries) => {
-entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.fade-in-up').forEach(el => obs.observe(el));
-}
-
-function spawnParticles() {
-const container = document.getElementById('heroParticles');
-for (let i = 0; i < 20; i++) {
-const p = document.createElement('div');
-p.className = 'particle';
-p.style.cssText = `
-left:${Math.random()*100}%;
-width:${2+Math.random()*3}px;
-height:${2+Math.random()*3}px;
-animation-duration:${8+Math.random()*14}s;
-animation-delay:${Math.random()*12}s;
-`;
-container.appendChild(p);
-}
-}
-
-function animateCounter(id, target) {
-const el = document.getElementById(id);
-let n = 0;
-const step = Math.ceil(target / 60);
-const timer = setInterval(() => {
-n = Math.min(n + step, target);
-el.textContent = n.toLocaleString();
-if (n >= target) clearInterval(timer);
-}, 30);
-}
-
-function animateStatCounter() {
-animateCounter('stat-users', 1247);
-}
-
-function formatTime(seconds) {
-if (!seconds) return '—';
-const m = Math.floor(seconds / 60);
-const s = seconds % 60;
-return m > 0 ? m + 'm ' + s + 's' : s + 's';
-}
-
-function escHtml(str) {
-return String(str).replace(/[&<>"']/g, c =>
-({'&':'&','<':'<','>':'>','"':'"',"'":'''}[c]));
-}
-
-/* ─────────────────────────────────────────────
-OAUTH2 POPUP MESSAGE LISTENER
-───────────────────────────────────────────── */
-window.addEventListener('message', function(event) {
-if (event.origin !== 'https://accounts.google.com') return;
-if (event.data && event.data.type === 'authorization_response') {
-if (event.data.id_token) {
-handleGoogleCredential({ credential: event.data.id_token });
-}
-}
-});
-
-(function checkOAuthRedirect() {
-const hash = window.location.hash;
-if (!hash) return;
-const params = new URLSearchParams(hash.replace('#', ''));
-const accessToken = params.get('access_token');
-if (!accessToken) return;
-fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-headers: { 'Authorization': 'Bearer ' + accessToken }
-})
-.then(r => r.json())
-.then(profile => {
-currentUser = {
-id:      profile.sub,
-name:    profile.name,
-email:   profile.email,
-picture: profile.picture,
-token:   accessToken,
-privacyLeaderboard: true,
-privacyHistory:     false,
-privacyAnalytics:   true
-};
-localStorage.setItem('lexiq_user', JSON.stringify(currentUser));
-history.replaceState(null, '', window.location.pathname + window.location.search);
-onUserSignedIn();
-showToast('Welcome, ' + currentUser.name.split(' ')[0] + '!', 'gold');
-registerUserToSheets(currentUser);
-})
-.catch(err => console.error('OAuth userinfo error:', err));
-})();
-//]]></script>
-
-
-
 
 <script>
+/* CONFIG */
+const GID   = '305545954226-dd79hqj2lnatubnhqmfvaou0e4h1sr9q.apps.googleusercontent.com';
+const ARENA = 'https://script.google.com/macros/s/AKfycbzPByuIg8prgpVwmwsOwvn7Ptn3vAvhm7pmfwZzdYKfSZSAXSjXrIzECECoeleFLuVA/exec';
+const USERS = 'https://script.google.com/macros/s/AKfycbwilxuNBpU5vQaiE5E9R_4QxS5LZIQ7evCQx1NTOzi8xIpT-iS0flpsqSTcVo_zRodN/exec';
 
-/* ─────────────────────────────────────────────
-CONSTANTS
-───────────────────────────────────────────── */
-const GOOGLE_CLIENT_ID = '305545954226-dd79hqj2lnatubnhqmfvaou0e4h1sr9q.apps.googleusercontent.com';
-const USERS_API_URL = 'https://script.google.com/macros/s/AKfycbwilxuNBpU5vQaiE5E9R_4QxS5LZIQ7evCQx1NTOzi8xIpT-iS0flpsqSTcVo_zRodN/exec';
-const ARENA_API_URL = 'https://script.google.com/macros/s/AKfycbzPByuIg8prgpVwmwsOwvn7Ptn3vAvhm7pmfwZzdYKfSZSAXSjXrIzECECoeleFLuVA/exec';
-
-/* ─────────────────────────────────────────────
-CONSTITUTION PARTS DATA
-───────────────────────────────────────────── */
-const CONSTITUTION_PARTS = [
-{ id:'I',    title:'The Union and Its Territory', articles:'1–4',   topics:['State formation','Territory','Admission of States'], maxQ:10 },
-{ id:'II',   title:'Citizenship',                  articles:'5–11',  topics:['Citizenship at commencement','Overseas citizenship','Renunciation'], maxQ:15 },
-{ id:'III',  title:'Fundamental Rights',           articles:'12–35', topics:['Right to Equality','Right to Freedom','Right against Exploitation','Cultural Rights','Right to Constitutional Remedies'], maxQ:100 },
-{ id:'IV',   title:'Directive Principles of State Policy', articles:'36–51', topics:['DPSP','Welfare State','International Peace'], maxQ:60 },
-{ id:'IVA',  title:'Fundamental Duties',           articles:'51A',   topics:['11 Duties','Constitutional Obligations'], maxQ:10 },
-{ id:'V',    title:'The Union Government',         articles:'52–151', topics:['President','Vice-President','Parliament','Council of Ministers','Supreme Court','CAG'], maxQ:100 },
-{ id:'VI',   title:'The States',                   articles:'152–237', topics:['Governor','State Legislature','High Courts','Subordinate Courts','State Executives'], maxQ:100 },
-{ id:'VIII', title:'The Union Territories',        articles:'239–242', topics:['Administration of UTs','Special provisions for Delhi'], maxQ:10 },
-{ id:'IX',   title:'The Panchayats',               articles:'243–243O', topics:['73rd Amendment','Gram Sabha','Gram Panchayat','Panchayati Raj'], maxQ:30 },
-{ id:'IXA',  title:'The Municipalities',           articles:'243P–243ZG', topics:['74th Amendment','Municipal Corporations','Urban Local Bodies'], maxQ:25 },
-{ id:'IXB',  title:'Co-operative Societies',       articles:'243ZH–243ZT', topics:['97th Amendment','Multi-State Co-operatives'], maxQ:15 },
-{ id:'X',    title:'Scheduled and Tribal Areas',   articles:'244–244A', topics:['5th Schedule','6th Schedule','Tribal Autonomy'], maxQ:15 },
-{ id:'XI',   title:'Union–State Relations',        articles:'245–263', topics:['Legislative Relations','Administrative Relations','Financial Relations','Inter-State Council'], maxQ:50 },
-{ id:'XII',  title:'Finance, Property, Contracts', articles:'264–300A', topics:['Finance Commission','Grants','Right to Property','Consolidated Fund'], maxQ:60 },
-{ id:'XIII', title:'Trade, Commerce and Intercourse', articles:'301–307', topics:['Freedom of Trade','Trade Regulations','Restrictions'], maxQ:15 },
-{ id:'XIV',  title:'Services under Union and States', articles:'308–323', topics:['All India Services','UPSC','SPSC','Public Service Commissions'], maxQ:25 },
-{ id:'XIVA', title:'Tribunals',                    articles:'323A–323B', topics:['Administrative Tribunals','42nd Amendment'], maxQ:10 },
-{ id:'XV',   title:'Elections',                    articles:'324–329A', topics:['Election Commission','Delimitation','Reservation of Seats'], maxQ:30 },
-{ id:'XVI',  title:'Special Provisions for Certain Classes', articles:'330–342', topics:['SC/ST Reservations','Anglo-Indians','OBCs'], maxQ:30 },
-{ id:'XVII', title:'Official Language',            articles:'343–351', topics:['Hindi','English','Classical Languages','8th Schedule'], maxQ:20 },
-{ id:'XVIII',title:'Emergency Provisions',         articles:'352–360', topics:['National Emergency','President\'s Rule','Financial Emergency'], maxQ:40 },
-{ id:'XIX',  title:'Miscellaneous',                articles:'361–367', topics:['Presidential Immunity','Interpretation','Special Courts'], maxQ:15 },
-{ id:'XX',   title:'Amendment of the Constitution', articles:'368',  topics:['Constitutional Amendment','Basic Structure Doctrine'], maxQ:10 },
-{ id:'XXI',  title:'Temporary and Transitional Provisions', articles:'369–392', topics:['Transitional Provisions','J&K','Special Status'], maxQ:20 },
-{ id:'XXII', title:'Short Title, Commencement and Repeals', articles:'393–395', topics:['Commencement','Repeal of Acts'], maxQ:10 }
+/* DATA */
+const PARTS=[
+  {id:'I',   title:'The Union and Its Territory',           art:'1–4',      topics:['State formation','Territory','Admission of States'],maxQ:10},
+  {id:'II',  title:'Citizenship',                           art:'5–11',     topics:['Citizenship at commencement','Overseas citizenship','Renunciation'],maxQ:15},
+  {id:'III', title:'Fundamental Rights',                    art:'12–35',    topics:['Right to Equality','Right to Freedom','Right against Exploitation','Cultural Rights'],maxQ:100},
+  {id:'IV',  title:'Directive Principles of State Policy',  art:'36–51',    topics:['DPSP','Welfare State','International Peace'],maxQ:60},
+  {id:'IVA', title:'Fundamental Duties',                    art:'51A',      topics:['11 Fundamental Duties','Constitutional Obligations'],maxQ:10},
+  {id:'V',   title:'The Union Government',                  art:'52–151',   topics:['President','Parliament','Supreme Court','CAG'],maxQ:100},
+  {id:'VI',  title:'The States',                            art:'152–237',  topics:['Governor','State Legislature','High Courts'],maxQ:100},
+  {id:'VIII',title:'The Union Territories',                 art:'239–242',  topics:['Administration of UTs','Delhi Special Provisions'],maxQ:10},
+  {id:'IX',  title:'The Panchayats',                        art:'243–243O', topics:['73rd Amendment','Gram Sabha','Panchayati Raj'],maxQ:30},
+  {id:'IXA', title:'The Municipalities',                    art:'243P–243ZG',topics:['74th Amendment','Municipal Corporations','ULBs'],maxQ:25},
+  {id:'IXB', title:'Co-operative Societies',                art:'243ZH–243ZT',topics:['97th Amendment','Multi-State Co-operatives'],maxQ:15},
+  {id:'X',   title:'Scheduled and Tribal Areas',            art:'244–244A', topics:['5th Schedule','6th Schedule','Tribal Autonomy'],maxQ:15},
+  {id:'XI',  title:'Union–State Relations',                 art:'245–263',  topics:['Legislative','Administrative','Financial Relations'],maxQ:50},
+  {id:'XII', title:'Finance, Property, Contracts',          art:'264–300A', topics:['Finance Commission','Right to Property','Consolidated Fund'],maxQ:60},
+  {id:'XIII',title:'Trade, Commerce and Intercourse',       art:'301–307',  topics:['Freedom of Trade','Trade Regulations'],maxQ:15},
+  {id:'XIV', title:'Services under Union and States',       art:'308–323',  topics:['All India Services','UPSC','PSCs'],maxQ:25},
+  {id:'XIVA',title:'Tribunals',                             art:'323A–323B',topics:['Administrative Tribunals','42nd Amendment'],maxQ:10},
+  {id:'XV',  title:'Elections',                             art:'324–329A', topics:['Election Commission','Delimitation','Seat Reservation'],maxQ:30},
+  {id:'XVI', title:'Special Provisions for Certain Classes',art:'330–342',  topics:['SC/ST Reservations','Anglo-Indians','OBCs'],maxQ:30},
+  {id:'XVII',title:'Official Language',                     art:'343–351',  topics:['Hindi','English','8th Schedule'],maxQ:20},
+  {id:'XVIII',title:'Emergency Provisions',                 art:'352–360',  topics:['National Emergency','President\'s Rule','Financial Emergency'],maxQ:40},
+  {id:'XIX', title:'Miscellaneous',                         art:'361–367',  topics:['Presidential Immunity','Interpretation'],maxQ:15},
+  {id:'XX',  title:'Amendment of the Constitution',         art:'368',      topics:['Constitutional Amendment','Basic Structure Doctrine'],maxQ:10},
+  {id:'XXI', title:'Temporary and Transitional Provisions', art:'369–392',  topics:['Transitional Provisions','Special Status'],maxQ:20},
+  {id:'XXII',title:'Short Title, Commencement and Repeals', art:'393–395',  topics:['Commencement','Repeal of Acts'],maxQ:10},
 ];
 
-/* ─────────────────────────────────────────────
-APP STATE
-───────────────────────────────────────────── */
-let currentUser    = null;
-let selectedPart   = null;
-let selectedDiff   = 'medium';
-let selectedQCount = 20;
-let leaderboardCache = {};
-let activeLbPart   = null;
+/* STATE */
+let U=null, selPart=null, selDiff='medium', ttimer=null;
 
-/* ─────────────────────────────────────────────
-GOOGLE SIGN-IN
-───────────────────────────────────────────── */
-function initGoogleSignIn() {
-google.accounts.id.initialize({
-client_id: GOOGLE_CLIENT_ID,
-callback: handleGoogleCredential,
-auto_select: false,
-cancel_on_tap_outside: true,
-ux_mode: 'popup'
-});
-google.accounts.id.renderButton(
-document.getElementById('gsi-btn-container'),
-{ theme: 'outline', size: 'large', width: 380, text: 'signin_with' }
-);
-window._googleReady = true;
+/* GSI */
+function initGSI(){
+  if(!window.google)return;
+  google.accounts.id.initialize({client_id:GID,callback:handleCred,auto_select:false,cancel_on_tap_outside:true,ux_mode:'popup'});
+  renderGSI();
+  window._gsiOk=true;
 }
+function renderGSI(){
+  if(!window.google||!window._gsiOk&&!window.google?.accounts)return;
+  try{
+    google.accounts.id.renderButton(document.getElementById('gsi-btn'),
+      {theme:'filled_black',size:'large',width:320,text:'signin_with',shape:'pill',logo_alignment:'left'});
+  }catch(e){}
+}
+function handleCred(resp){
+  try{
+    const p=parseJwt(resp.credential);
+    U={id:p.sub,name:p.name,email:p.email,picture:p.picture,token:resp.credential,privacyLeaderboard:true,privacyHistory:false};
+    localStorage.setItem('lexiq_user',JSON.stringify(U));
+    closeModal('mSignin');onSignedIn();
+    toast('Welcome, '+U.name.split(' ')[0]+'! ⚖️','gold');
+    post(USERS,'register_user',{userId:U.id,name:U.name,email:U.email,picture:U.picture});
+    const pp=sessionStorage.getItem('pp');
+    if(pp){sessionStorage.removeItem('pp');setTimeout(()=>openQuiz(pp),400);}
+  }catch(e){toast('Sign-in failed. Please try again.','red');}
+}
+function parseJwt(t){const b=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));}
 
-window.addEventListener('load', () => {
-renderParts(CONSTITUTION_PARTS);
-setupScrollEffects();
-spawnParticles();
-animateStatCounter();
-loadLeaderboardTabs();
-restoreSession();
-});
-
-function initiateGoogleSignIn() {
-if (!window._googleReady || !window.google) {
-const oauthURL = 'https://accounts.google.com/o/oauth2/v2/auth'
-+ '?client_id=' + encodeURIComponent(GOOGLE_CLIENT_ID)
-+ '&redirect_uri=' + encodeURIComponent(window.location.origin + window.location.pathname)
-+ '&response_type=token'
-+ '&scope=' + encodeURIComponent('openid email profile')
-+ '&prompt=select_account';
-window.open(oauthURL, 'google_signin', 'width=500,height=600,left=200,top=100');
-return;
+function restoreSession(){
+  const s=localStorage.getItem('lexiq_user');
+  if(s){try{U=JSON.parse(s);onSignedIn();post(USERS,'register_user',{userId:U.id,name:U.name,email:U.email,picture:U.picture});}catch(e){localStorage.removeItem('lexiq_user');}}
 }
-const btn = document.querySelector('#gsi-btn-container iframe');
-if (btn) {
-btn.contentWindow.document.querySelector('[role=button]')?.click();
-return;
+function onSignedIn(){
+  document.getElementById('btn-snav').style.display='none';
+  document.getElementById('n-user').style.display='flex';
+  document.getElementById('n-name').textContent=U.name.split(' ')[0];
+  document.getElementById('n-avatar').src=U.picture;
+  document.getElementById('profPic').src=U.picture;
+  document.getElementById('profName').textContent=U.name;
+  document.getElementById('profEmail').textContent=U.email;
+  document.getElementById('togLb').checked=U.privacyLeaderboard!==false;
+  document.getElementById('togHist').checked=U.privacyHistory===true;
+  fetchStats();
 }
-google.accounts.id.prompt((notification) => {
-if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-openOAuthPopup();
+function signOut(){
+  if(window.google)google.accounts.id.disableAutoSelect();
+  U=null;localStorage.removeItem('lexiq_user');closeModal('mProfile');
+  document.getElementById('btn-snav').style.display='';
+  document.getElementById('n-user').style.display='none';
+  toast('Signed out successfully.');
 }
-});
+function deleteAccount(){
+  if(!confirm('⚠️ Permanently delete your LEX IQ account?\n\nThis removes ALL your scores. This cannot be undone.'))return;
+  Promise.all([post(ARENA,'delete_user',{userId:U.id,email:U.email}),post(USERS,'delete_user',{userId:U.id,email:U.email})]).then(()=>{signOut();toast('Account deleted.','red');});
 }
-
-function openOAuthPopup() {
-const params = new URLSearchParams({
-client_id:     GOOGLE_CLIENT_ID,
-redirect_uri:  window.location.origin + '/oauth2callback',
-response_type: 'code',
-scope:         'openid email profile',
-prompt:        'select_account'
-});
-const popup = window.open(
-'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString(),
-'LexIQ_GoogleSignIn',
-'width=500,height=600,scrollbars=yes,resizable=yes,left=' +
-Math.round((screen.width-500)/2) + ',top=' + Math.round((screen.height-600)/2)
-);
-if (!popup) showToast('Popup blocked. Please allow popups for this site.', 'red');
+function fetchStats(){
+  if(!U)return;
+  get(ARENA,'get_user_stats',{userId:U.id}).then(d=>{
+    if(d?.stats){
+      document.getElementById('ps-q').textContent=d.stats.totalQuizzes||0;
+      document.getElementById('ps-a').textContent=d.stats.avgScore?d.stats.avgScore+'%':'—';
+      document.getElementById('ps-r').textContent=d.stats.bestRank||'—';
+    }
+  });
 }
-
-function handleGoogleCredential(response) {
-try {
-const payload = parseJwt(response.credential);
-currentUser = {
-id:      payload.sub,
-name:    payload.name,
-email:   payload.email,
-picture: payload.picture,
-token:   response.credential,
-privacyLeaderboard: true,
-privacyHistory:     false,
-privacyAnalytics:   true
-};
-localStorage.setItem('lexiq_user', JSON.stringify(currentUser));
-onUserSignedIn();
-closeModal('signinModal');
-showToast('Welcome, ' + currentUser.name.split(' ')[0] + '!', 'gold');
-registerUserToSheets(currentUser);
-
-const pending = sessionStorage.getItem('pendingQuizPart');
-if (pending) {
-sessionStorage.removeItem('pendingQuizPart');
-setTimeout(() => openQuizConfig(pending), 600);
+function updatePrivacy(k,v){
+  if(!U)return;
+  U['privacy'+k[0].toUpperCase()+k.slice(1)]=v;
+  localStorage.setItem('lexiq_user',JSON.stringify(U));
+  post(USERS,'update_privacy',{userId:U.id,key:k,value:v});
 }
-} catch(e) {
-console.error('Sign-in error:', e);
-showToast('Sign-in failed. Please try again.', 'red');
-}
+function openSignIn(){
+  openModal('mSignin');
+  setTimeout(()=>{if(window.google&&window._gsiOk)renderGSI();},120);
 }
 
-function parseJwt(token) {
-const base64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-return JSON.parse(decodeURIComponent(atob(base64).split('').map(c =>
-'%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+/* PARTS */
+function renderParts(list){
+  document.getElementById('pgrid').innerHTML=list.map(p=>`
+    <div class="pcard" onclick="openQuiz('${p.id}')">
+      <div class="pnum">${p.id}</div>
+      <div class="pbadge">Part ${p.id}</div>
+      <h3 class="ptitle">${esc(p.title)}</h3>
+      <p class="parts">Articles ${p.art} &nbsp;·&nbsp; Up to ${p.maxQ} Qs</p>
+      <div class="pchips">${p.topics.slice(0,3).map(t=>`<span class="pchip">${esc(t)}</span>`).join('')}${p.topics.length>3?`<span class="pchip">+${p.topics.length-3}</span>`:''}</div>
+      <div class="pbtn">Start Quiz ›</div>
+    </div>`).join('');
+}
+function filterParts(q){
+  const s=q.toLowerCase();
+  renderParts(s?PARTS.filter(p=>p.title.toLowerCase().includes(s)||p.id.toLowerCase().includes(s)||p.topics.some(t=>t.toLowerCase().includes(s))):PARTS);
 }
 
-function onUserSignedIn() {
-document.getElementById('signin-nav-area').style.display  = 'none';
-document.getElementById('user-nav-area').style.display    = 'flex';
-document.getElementById('nav-display-name').textContent   = currentUser.name.split(' ')[0];
-document.getElementById('nav-avatar').src                 = currentUser.picture;
-document.getElementById('profileAvatar').src  = currentUser.picture;
-document.getElementById('profileName').textContent  = currentUser.name;
-document.getElementById('profileEmail').textContent = currentUser.email;
-document.getElementById('toggleLeaderboard').checked = currentUser.privacyLeaderboard !== false;
-document.getElementById('toggleHistory').checked     = currentUser.privacyHistory     === true;
-document.getElementById('toggleAnalytics').checked   = currentUser.privacyAnalytics   !== false;
-fetchUserStats();
-loadLeaderboard(activeLbPart || CONSTITUTION_PARTS[2].id); 
+/* QUIZ CONFIG */
+function openQuiz(id){
+  if(!U){toast('Please sign in first.');sessionStorage.setItem('pp',id);openSignIn();return;}
+  const p=PARTS.find(x=>x.id===id);if(!p)return;
+  selPart=p;selDiff='medium';
+  document.getElementById('qmTitle').textContent='Part '+p.id+' — Quiz';
+  document.getElementById('qmSub').textContent=p.title;
+  document.querySelectorAll('.dbtn').forEach(b=>b.classList.toggle('on',b.dataset.d==='medium'));
+  openModal('mQuiz');
+}
+function setDiff(btn){selDiff=btn.dataset.d;document.querySelectorAll('.dbtn').forEach(b=>b.classList.toggle('on',b===btn));}
+function startExploring(){if(!U){openSignIn();return;}document.getElementById('parts').scrollIntoView({behavior:'smooth'});}
+function launchQuiz(){
+  if(!selPart)return;
+  const cfg={partId:selPart.id,partTitle:selPart.title,difficulty:selDiff,count:selPart.maxQ,userId:U?.id||'',userName:U?.name||'',userPic:U?.picture||''};
+  const s=JSON.stringify(cfg);
+  try{sessionStorage.setItem('lexiq_quiz_config',s);}catch(e){}
+  try{localStorage.setItem('lexiq_quiz_config',s);}catch(e){}
+  window.location.href='quiz.html?cfg='+encodeURIComponent(s);
 }
 
-function restoreSession() {
-const stored = localStorage.getItem('lexiq_user');
-if (stored) {
-try {
-currentUser = JSON.parse(stored);
-onUserSignedIn();
-registerUserToSheets(currentUser);
-const pending = sessionStorage.getItem('pendingQuizPart');
-if (pending) {
-sessionStorage.removeItem('pendingQuizPart');
-setTimeout(() => openQuizConfig(pending), 600);
+/* LEADERBOARD */
+function initLb(){
+  const top=['III','V','VI','XVIII','XV'];
+  document.getElementById('lbTabs').innerHTML=top.map(id=>{
+    const p=PARTS.find(x=>x.id===id);
+    const lbl=p?p.title.split(',')[0]:id;
+    return `<button class="lb-tab" data-part="${id}" onclick="loadLb('${id}')">${esc(lbl)}</button>`;
+  }).join('');
+  loadLb('III');
 }
-} catch(e) { localStorage.removeItem('lexiq_user'); }
-}
-}
-
-/* ─────────────────────────────────────────────
-GOOGLE SHEETS BACKEND (DUAL ROUTING)
-───────────────────────────────────────────── */
-function apiFetch(url, action, data) {
-const params = new URLSearchParams({ action, ...data });
-return fetch(url + '?' + params.toString(), { method:'GET' }).then(r => r.json()).catch(() => null);
-}
-
-function apiPost(url, action, data) {
-return fetch(url, {
-method: 'POST',
-headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-body: JSON.stringify({ action, ...data })
-}).then(r => r.json()).catch(err => {
-console.error('Fetch error:', err);
-return null;
-});
+function loadLb(pid){
+  document.querySelectorAll('.lb-tab').forEach(t=>t.classList.toggle('active',t.dataset.part===pid));
+  document.getElementById('lbBody').innerHTML='<div class="lb-empty shimmer" style="height:200px;"></div>';
+  get(ARENA,'get_leaderboard',{partId:pid}).then(d=>{
+    if(!d?.rows?.length){document.getElementById('lbBody').innerHTML='<div class="lb-empty">🏆 No entries yet. Be the first to compete!</div>';return;}
+    const medals=['🥇','🥈','🥉'];
+    document.getElementById('lbBody').innerHTML=d.rows.map((r,i)=>`
+      <div class="lb-row ${i<3?'r'+(i+1):''}">
+        <div class="lb-rank">${medals[i]||i+1}</div>
+        <img class="lb-pic" src="${r.picture||'https://ui-avatars.com/api/?name='+encodeURIComponent(r.name||'?')+'&background=1C3FA8&color=C9A44A&bold=true'}" alt=""/>
+        <div class="lb-inf"><div class="lb-nm">${esc(r.name||'Anonymous')}</div><div class="lb-tm">${r.timeTaken?Math.floor(r.timeTaken/60)+'m '+r.timeTaken%60+'s':''}</div></div>
+        <div class="lb-sc">${r.score}%</div>
+      </div>`).join('');
+  }).catch(()=>{document.getElementById('lbBody').innerHTML='<div class="lb-empty">Unable to load right now.</div>';});
 }
 
-function registerUserToSheets(user) {
-apiPost(USERS_API_URL, 'register_user', {
-userId:  user.id,
-name:    user.name,
-email:   user.email,
-picture: user.picture
-});
+/* API */
+function get(url,action,data={}){const p=new URLSearchParams({action,...data});return fetch(url+'?'+p).then(r=>r.json()).catch(()=>null);}
+function post(url,action,data={}){return fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,...data})}).then(r=>r.json()).catch(()=>null);}
+
+/* MODALS */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openProfile(){if(U){fetchStats();openModal('mProfile');}}
+document.querySelectorAll('.moverlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+/* TOAST */
+function toast(msg,type=''){
+  const e=document.getElementById('ti');
+  e.textContent=msg;e.className='ti show'+(type?' '+type:'');
+  clearTimeout(ttimer);ttimer=setTimeout(()=>e.classList.remove('show'),3500);
 }
 
-function fetchUserStats() {
-if (!currentUser) return;
-apiFetch(ARENA_API_URL, 'get_user_stats', { userId: currentUser.id }).then(data => {
-if (data && data.stats) {
-document.getElementById('pstat-quizzes').textContent = data.stats.totalQuizzes || 0;
-document.getElementById('pstat-avg').textContent     = data.stats.avgScore ? data.stats.avgScore + '%' : '—';
-document.getElementById('pstat-rank').textContent    = data.stats.bestRank ? '#' + data.stats.bestRank : '#—';
-if (data.stats.totalUsers) animateCounter('stat-users', parseInt(data.stats.totalUsers));
-}
-});
-}
+/* UTILS */
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-function loadLeaderboard(partId) {
-activeLbPart = partId;
-document.getElementById('lbBody').innerHTML = '<div class="lb-empty shimmer" style="height:200px;"></div>';
-apiFetch(ARENA_API_URL, 'get_leaderboard', { partId }).then(data => {
-if (!data || !data.rows || data.rows.length === 0) {
-document.getElementById('lbBody').innerHTML = '<div class="lb-empty">🏆 No entries yet. Be the first to take this quiz!</div>';
-return;
-}
-renderLeaderboard(data.rows);
-}).catch(() => {
-document.getElementById('lbBody').innerHTML = '<div class="lb-empty">Unable to load leaderboard right now.</div>';
-});
-document.querySelectorAll('.lb-tab').forEach(t => {
-t.classList.toggle('active', t.dataset.part === partId);
-});
-}
+/* SCROLL */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
 
-function renderLeaderboard(rows) {
-const medals = ['🥇','🥈','🥉'];
-const rankClasses = ['gold-rank','silver-rank','bronze-rank'];
-document.getElementById('lbBody').innerHTML = rows.slice(0,10).map((row,i) => {
-const initial = (row.name||'?')[0].toUpperCase();
-const avatarHtml = row.picture
-? `<img src="${row.picture}" alt="${row.name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`
-: initial;
-return `
-<div class="lb-row">
-<div class="lb-rank ${rankClasses[i]||''}">${medals[i]||i+1}</div>
-<div class="lb-user">
-<div class="lb-avatar">${avatarHtml}</div>
-<div class="lb-name">${escHtml(row.name||'Anonymous')}</div>
-</div>
-<div class="lb-time">${formatTime(row.timeTaken)}</div>
-<div class="lb-score">${row.score}%</div>
-</div>`;
-}).join('');
-}
-
-function deleteUserData() {
-apiPost(ARENA_API_URL, 'delete_user', { userId: currentUser.id, email: currentUser.email });
-return apiPost(USERS_API_URL, 'delete_user', { userId: currentUser.id, email: currentUser.email });
-}
-
-/* ─────────────────────────────────────────────
-PARTS RENDERING
-───────────────────────────────────────────── */
-function renderParts(parts) {
-const grid = document.getElementById('partsGrid');
-if (!grid) return;
-grid.innerHTML = parts.map(p => `
-<div class="part-card fade-in-up" onclick="openQuizConfig('${p.id}')">
-<div class="part-num">${p.id}</div>
-<div class="part-tag">Part ${p.id}</div>
-<h3 class="part-title">${escHtml(p.title)}</h3>
-<p class="part-articles">Articles ${p.articles}</p>
-<div class="part-topics">
-${p.topics.slice(0,3).map(t => `<span class="topic-chip">${escHtml(t)}</span>`).join('')}
-${p.topics.length > 3 ? `<span class="topic-chip">+${p.topics.length-3} more</span>` : ''}
-</div>
-<button class="btn-start-part" onclick="event.stopPropagation();openQuizConfig('${p.id}')">
-Start Quiz →
-</button>
-</div>`).join('');
-setTimeout(() => {
-grid.querySelectorAll('.fade-in-up').forEach((el,i) => {
-setTimeout(() => el.classList.add('visible'), i * 60);
-});
-}, 100);
-}
-
-function filterParts(query) {
-const q = query.toLowerCase();
-const filtered = CONSTITUTION_PARTS.filter(p =>
-p.title.toLowerCase().includes(q) ||
-p.id.toLowerCase().includes(q) ||
-p.topics.some(t => t.toLowerCase().includes(q)) ||
-p.articles.toLowerCase().includes(q)
-);
-renderParts(filtered);
-}
-
-/* ─────────────────────────────────────────────
-QUIZ FLOW
-───────────────────────────────────────────── */
-function handleQuizSectionClick(section) {
-if (section === 'constitutional') {
-document.getElementById('constitutional-parts').scrollIntoView({ behavior:'smooth' });
-}
-}
-
-function openQuizConfig(partId) {
-if (!currentUser) {
-showToast('Please sign in to start a quiz.','');
-openSignInModal();
-sessionStorage.setItem('pendingQuizPart', partId);
-return;
-}
-const part = CONSTITUTION_PARTS.find(p => p.id === partId);
-if (!part) return;
-selectedPart = part;
-selectedDiff = 'medium';
-
-document.getElementById('quizConfigTitle').textContent = 'Part ' + part.id + ' Quiz';
-document.getElementById('quizConfigSubtitle').textContent = part.title;
-
-// Slider hidden as requested
-document.getElementById('qCountField').style.display = 'none';
-
-document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
-document.querySelector('.diff-btn.medium').classList.add('selected');
-
-openModal('quizConfigModal');
-}
-
-function selectDifficulty(diff, btn) {
-selectedDiff = diff;
-document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
-btn.classList.add('selected');
-}
-
-function launchQuiz() {
-if (!selectedPart) return;
-closeModal('quizConfigModal');
-const config = {
-partId:     selectedPart.id,
-partTitle:  selectedPart.title,
-difficulty: selectedDiff,
-count:      selectedPart.maxQ,
-userId:     currentUser ? currentUser.id      : '',
-userName:   currentUser ? currentUser.name     : '',
-userPic:    currentUser ? currentUser.picture  : ''
-};
-const configStr = JSON.stringify(config);
-try { sessionStorage.setItem('lexiq_quiz_config', configStr); } catch(e) {}
-try { localStorage.setItem('lexiq_quiz_config',   configStr); } catch(e) {}
-window.location.href = 'quiz.html?cfg=' + encodeURIComponent(configStr);
-}
-
-/* ─────────────────────────────────────────────
-LEADERBOARD TABS
-───────────────────────────────────────────── */
-function loadLeaderboardTabs() {
-const popularParts = ['III','V','VI','XVIII','XV','IV'];
-const tabs = document.getElementById('lbTabs');
-tabs.innerHTML = popularParts.map(id => {
-const p = CONSTITUTION_PARTS.find(x => x.id === id);
-return `<button class="lb-tab" data-part="${id}" onclick="loadLeaderboard('${id}')">
-Part ${id}
-</button>`;
-}).join('');
-activeLbPart = 'III';
-document.querySelectorAll('.lb-tab')[0]?.classList.add('active');
-loadLeaderboard('III');
-}
-
-/* ─────────────────────────────────────────────
-PROFILE & AUTH
-───────────────────────────────────────────── */
-function openProfileModal() {
-if (!currentUser) { openSignInModal(); return; }
-openModal('profileModal');
-}
-
-function signOutUser() {
-if (window.google) google.accounts.id.disableAutoSelect();
-currentUser = null;
-localStorage.removeItem('lexiq_user');
-closeModal('profileModal');
-document.getElementById('signin-nav-area').style.display = 'flex';
-document.getElementById('user-nav-area').style.display   = 'none';
-showToast('Signed out successfully.');
-}
-
-function confirmDeleteAccount() {
-const confirmed = confirm(
-'⚠️ Permanently delete your LEX IQ account?\n\n' +
-'This will remove ALL your quiz history, scores, and leaderboard entries. This action CANNOT be undone.'
-);
-if (!confirmed) return;
-showToast('Deleting your account...', '');
-deleteUserData().then(res => {
-signOutUser();
-showToast('Account deleted. We\'re sorry to see you go.', 'red');
-}).catch(() => {
-showToast('Deletion failed. Please contact support.', 'red');
-});
-}
-
-function savePrivacySetting(key, value) {
-if (!currentUser) return;
-if (key === 'leaderboard') currentUser.privacyLeaderboard = value;
-if (key === 'history')     currentUser.privacyHistory     = value;
-if (key === 'analytics')   currentUser.privacyAnalytics   = value;
-localStorage.setItem('lexiq_user', JSON.stringify(currentUser));
-apiPost(USERS_API_URL, 'update_privacy', { userId: currentUser.id, key, value });
-showToast('Privacy settings saved.', 'gold');
-}
-
-/* ─────────────────────────────────────────────
-MODAL HELPERS
-───────────────────────────────────────────── */
-function openModal(id)  { document.getElementById(id).classList.add('active'); document.body.style.overflow='hidden'; }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow=''; }
-function openSignInModal() { openModal('signinModal'); }
-
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(overlay.id); });
-});
-
-/* ─────────────────────────────────────────────
-TOAST
-───────────────────────────────────────────── */
-let toastTimer = null;
-function showToast(msg, type='') {
-const t = document.getElementById('toastMsg');
-t.textContent = msg;
-t.className = 'toast' + (type ? ' ' + type : '') + ' active';
-clearTimeout(toastTimer);
-toastTimer = setTimeout(() => t.classList.remove('active'), 3500);
-}
-
-/* ─────────────────────────────────────────────
-UI UTILITIES
-───────────────────────────────────────────── */
-function startExploring() {
-if (!currentUser) { openSignInModal(); return; }
-document.getElementById('constitutional-parts').scrollIntoView({ behavior:'smooth' });
-}
-
-function toggleMobileMenu() {
-const links = document.querySelector('.nav-links');
-if (links.style.display === 'flex') {
-links.style.display = 'none';
-} else {
-links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(11,61,145,0.97);padding:16px 20px;gap:4px;';
-}
-}
-
-function setupScrollEffects() {
-const nav = document.getElementById('lexiq-nav');
-window.addEventListener('scroll', () => {
-nav.classList.toggle('scrolled', window.scrollY > 40);
-});
-const obs = new IntersectionObserver((entries) => {
-entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.fade-in-up').forEach(el => obs.observe(el));
-}
-
-function spawnParticles() {
-const container = document.getElementById('heroParticles');
-for (let i = 0; i < 20; i++) {
-const p = document.createElement('div');
-p.className = 'particle';
-p.style.cssText = `
-left:${Math.random()*100}%;
-width:${2+Math.random()*3}px;
-height:${2+Math.random()*3}px;
-animation-duration:${8+Math.random()*14}s;
-animation-delay:${Math.random()*12}s;
-`;
-container.appendChild(p);
-}
-}
-
-function animateCounter(id, target) {
-const el = document.getElementById(id);
-let n = 0;
-const step = Math.ceil(target / 60);
-const timer = setInterval(() => {
-n = Math.min(n + step, target);
-el.textContent = n.toLocaleString();
-if (n >= target) clearInterval(timer);
-}, 30);
-}
-
-function animateStatCounter() {
-animateCounter('stat-users', 1247);
-}
-
-function formatTime(seconds) {
-if (!seconds) return '—';
-const m = Math.floor(seconds / 60);
-const s = seconds % 60;
-return m > 0 ? m + 'm ' + s + 's' : s + 's';
-}
-
-function escHtml(str) {
-return String(str).replace(/[&<>"']/g, c =>
-({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-/* ─────────────────────────────────────────────
-OAUTH2 POPUP MESSAGE LISTENER
-───────────────────────────────────────────── */
-window.addEventListener('message', function(event) {
-if (event.origin !== 'https://accounts.google.com') return;
-if (event.data && event.data.type === 'authorization_response') {
-if (event.data.id_token) {
-handleGoogleCredential({ credential: event.data.id_token });
-}
-}
-});
-
-(function checkOAuthRedirect() {
-const hash = window.location.hash;
-if (!hash) return;
-const params = new URLSearchParams(hash.replace('#', ''));
-const accessToken = params.get('access_token');
-if (!accessToken) return;
-fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-headers: { 'Authorization': 'Bearer ' + accessToken }
-})
-.then(r => r.json())
-.then(profile => {
-currentUser = {
-id:      profile.sub,
-name:    profile.name,
-email:   profile.email,
-picture: profile.picture,
-token:   accessToken,
-privacyLeaderboard: true,
-privacyHistory:     false,
-privacyAnalytics:   true
-};
-localStorage.setItem('lexiq_user', JSON.stringify(currentUser));
-history.replaceState(null, '', window.location.pathname + window.location.search);
-onUserSignedIn();
-showToast('Welcome, ' + currentUser.name.split(' ')[0] + '!', 'gold');
-registerUserToSheets(currentUser);
-})
-.catch(err => console.error('OAuth userinfo error:', err));
-})();
-
+/* INIT */
+window.addEventListener('load',()=>{renderParts(PARTS);initLb();restoreSession();});
 </script>
 </body>
 </html>
