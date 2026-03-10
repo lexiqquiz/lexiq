@@ -218,17 +218,40 @@ let U=null, roomCode=null, roomListener=null;
 let totalPts=0, correctCount=0, wrongCount=0;
 let curQIndex=-1, answered=false, timerRef=null, timePerQ=20;
 
-/* ── GSI ── */
+/* ── RESTORE SESSION ── */
+(function restoreSession(){
+  try{
+    const stored = localStorage.getItem('lexiq_user');
+    if(stored){
+      U = JSON.parse(stored);
+      document.addEventListener('DOMContentLoaded', ()=>{
+        document.getElementById('sSignin').classList.remove('on');
+        document.getElementById('sJoin').classList.add('on');
+      });
+    }
+  }catch(e){ localStorage.removeItem('lexiq_user'); }
+})();
+
+/* ── GSI (only if not already signed in) ── */
 window.initGSI = function(){
+  if(U) return;
   if(!window.google?.accounts?.id)return;
   google.accounts.id.initialize({client_id:GID,callback:handleCred,ux_mode:'popup'});
-  google.accounts.id.renderButton(document.getElementById('gsi-btn'),
-    {theme:'filled_black',size:'large',width:300,text:'signin_with',shape:'pill'});
+  let attempts=0;
+  const tryRender=()=>{
+    const el=document.getElementById('gsi-btn');
+    if(!el)return;
+    try{
+      google.accounts.id.renderButton(el,{theme:'filled_black',size:'large',width:300,text:'signin_with',shape:'pill'});
+    }catch(e){ if(++attempts<8) setTimeout(tryRender,300); }
+  };
+  setTimeout(tryRender,100);
 };
 function handleCred(resp){
   const p=parseJwt(resp.credential);
   U={id:p.sub,name:p.name,email:p.email,picture:p.picture};
-  show('sJoin'); hide('sSignin');
+  localStorage.setItem('lexiq_user', JSON.stringify(U));
+  show('sJoin');
 }
 function parseJwt(t){const b=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));}
 
