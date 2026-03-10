@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LEX IQ — Live Room Host</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<script src="https://accounts.google.com/gsi/client" defer onload="initGSI()"></script>
+<style>
+:root{--bg:#07090F;--surf:#0C1018;--card:#101520;--card2:#141B27;--bdr:rgba(201,164,74,.15);--bdr2:rgba(201,164,74,.4);--gold:#C9A44A;--gold2:#E5C76B;--goldd:rgba(201,164,74,.1);--tx:#EDE7D4;--tx2:#9AA3B8;--tx3:#4A5470;--ok:#22C55E;--er:#EF4444;--live:#EF4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-font-smoothing:antialiased;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;background:none;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+#nav{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.n-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--gold);}
+.n-live{display:flex;align-items:center;gap:7px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--live);font-size:.78rem;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:1px;}
+.n-live-dot{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* WRAP */
+#wrap{max-width:900px;margin:0 auto;padding:48px 24px 80px;}
+
+/* SCREEN SECTIONS */
+.screen{display:none;}
+.screen.on{display:block;}
+
+/* SIGN IN SCREEN */
+#sSignin{text-align:center;padding:80px 20px;}
+.si-logo{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:700;color:var(--gold);margin-bottom:10px;}
+.si-sub{color:var(--tx2);margin-bottom:36px;}
+#gsi-wrap{display:flex;justify-content:center;}
+
+/* SETUP SCREEN */
+.setup-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;margin-bottom:6px;}
+.setup-sub{color:var(--tx2);margin-bottom:36px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.field{display:flex;flex-direction:column;gap:8px;}
+.field label{font-size:.78rem;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1.5px;}
+.field select,.field input{background:var(--card);border:1.5px solid var(--bdr);border-radius:12px;padding:13px 16px;color:var(--tx);font-size:.92rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s;-webkit-appearance:none;}
+.field select:focus,.field input:focus{border-color:var(--gold);}
+.field select option{background:var(--card);}
+.q-slider-row{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+.q-slider-row label{font-size:.78rem;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap;}
+input[type=range]{flex:1;accent-color:var(--gold);height:4px;}
+.q-val{font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--gold);min-width:36px;text-align:right;}
+.btn-create{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:1rem;padding:16px;border-radius:14px;box-shadow:0 8px 24px rgba(201,164,74,.3);transition:.25s;}
+.btn-create:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(201,164,74,.45);}
+
+/* LOBBY SCREEN */
+.room-code-box{background:var(--card);border:1.5px solid var(--bdr2);border-radius:20px;padding:36px;text-align:center;margin-bottom:28px;}
+.rc-label{font-size:.76rem;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
+.rc-code{font-family:'Bebas Neue',cursive;font-size:5rem;letter-spacing:10px;color:var(--gold);line-height:1;}
+.rc-url{font-size:.8rem;color:var(--tx3);margin-top:8px;}
+.rc-url span{color:var(--gold);}
+.lobby-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.lobby-card{background:var(--card);border:1.5px solid var(--bdr);border-radius:16px;padding:20px;}
+.lc-title{font-size:.74rem;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;}
+.player-count{font-family:'Bebas Neue',cursive;font-size:3rem;color:var(--gold);line-height:1;margin-bottom:4px;}
+.player-sub{font-size:.8rem;color:var(--tx3);}
+#player-list{display:flex;flex-wrap:wrap;gap:8px;max-height:160px;overflow-y:auto;}
+.p-pill{display:flex;align-items:center;gap:7px;background:var(--card2);border:1px solid var(--bdr);border-radius:30px;padding:5px 12px 5px 5px;font-size:.8rem;font-weight:500;}
+.p-pill img{width:22px;height:22px;border-radius:50%;object-fit:cover;}
+.p-pill.new{animation:popIn .4s cubic-bezier(.4,0,.2,1);}
+@keyframes popIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.btn-start{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:1rem;padding:16px;border-radius:14px;box-shadow:0 8px 24px rgba(201,164,74,.3);transition:.25s;}
+.btn-start:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 36px rgba(201,164,74,.45);}
+.btn-start:disabled{opacity:.3;cursor:not-allowed;}
+
+/* QUESTION SCREEN */
+.q-host-bar{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1.5px solid var(--bdr);border-radius:16px;padding:16px 24px;margin-bottom:24px;}
+.q-progress-txt{font-size:.85rem;color:var(--tx2);}
+.q-timer-big{font-family:'Bebas Neue',cursive;font-size:3rem;color:var(--gold);line-height:1;}
+.q-timer-big.red{color:var(--er);}
+.q-answered{font-size:.85rem;color:var(--tx2);}
+.q-card{background:var(--card);border:1.5px solid var(--bdr);border-radius:20px;padding:36px;margin-bottom:24px;}
+.q-num-lbl{font-size:.74rem;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;}
+.q-text-host{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;line-height:1.35;margin-bottom:28px;}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.opt-host{background:var(--card2);border:1.5px solid var(--bdr);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;font-size:.9rem;font-weight:500;}
+.opt-host.revealed-ok{border-color:var(--ok);background:rgba(34,197,94,.08);color:#86EFAC;}
+.opt-host.revealed-ng{border-color:rgba(255,255,255,.1);opacity:.5;}
+.oh-lt{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
+.opt-host.revealed-ok .oh-lt{background:var(--ok);color:#fff;}
+.live-lb{background:var(--card);border:1.5px solid var(--bdr);border-radius:20px;padding:24px;}
+.llb-title{font-size:.74rem;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;}
+.llb-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.llb-row:last-child{border:none;}
+.llb-rank{font-family:'Bebas Neue',cursive;font-size:1.3rem;color:var(--tx3);width:28px;}
+.llb-pic{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.llb-name{flex:1;font-size:.88rem;font-weight:500;}
+.llb-score{font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--gold);}
+.btn-next-q{width:100%;background:var(--card2);border:1.5px solid var(--bdr);color:var(--tx2);font-weight:600;font-size:.92rem;padding:14px;border-radius:14px;transition:.2s;margin-top:16px;}
+.btn-next-q:hover{border-color:var(--gold);color:var(--gold);}
+.btn-finish-q{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:.92rem;padding:14px;border-radius:14px;margin-top:16px;}
+
+/* FINISHED SCREEN */
+#sFinished{text-align:center;}
+.fin-title{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;margin-bottom:8px;}
+.fin-sub{color:var(--tx2);margin-bottom:40px;}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin-bottom:40px;}
+.pod-box{background:var(--card);border:1.5px solid var(--bdr);border-radius:16px;padding:20px 16px;text-align:center;flex:1;max-width:200px;}
+.pod-box.first{border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.04);order:2;}
+.pod-box.second{order:1;}
+.pod-box.third{order:3;}
+.pod-medal{font-size:2rem;margin-bottom:8px;}
+.pod-pic{width:52px;height:52px;border-radius:50%;object-fit:cover;margin:0 auto 10px;border:2px solid var(--bdr2);}
+.pod-name{font-size:.85rem;font-weight:600;margin-bottom:4px;}
+.pod-score{font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--gold);}
+.btn-new-room{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:.95rem;padding:14px 32px;border-radius:50px;box-shadow:0 8px 24px rgba(201,164,74,.3);transition:.25s;margin:0 8px;}
+.btn-new-room:hover{transform:translateY(-2px);}
+.btn-home{display:inline-block;border:1.5px solid var(--bdr);color:var(--tx2);font-weight:600;font-size:.95rem;padding:13px 28px;border-radius:50px;transition:.25s;margin:0 8px;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;}
+.ti{background:var(--card2);border:1.5px solid var(--bdr);color:var(--tx);font-size:.86rem;font-weight:500;padding:11px 22px;border-radius:30px;box-shadow:0 16px 48px rgba(0,0,0,.5);opacity:0;transform:translateY(10px);transition:.3s;white-space:nowrap;}
+.ti.show{opacity:1;transform:translateY(0);}
+.ti.gold{border-color:var(--bdr2);color:var(--gold);}
+
+@media(max-width:640px){
+  #nav{padding:0 16px;}
+  #wrap{padding:28px 16px 60px;}
+  .form-grid{grid-template-columns:1fr;}
+  .lobby-grid{grid-template-columns:1fr;}
+  .opts-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="n-logo" href="index.html">⚖️ LEX IQ</a>
+  <div class="n-live"><span class="n-live-dot"></span>LIVE HOST</div>
+</nav>
+
+<div id="wrap">
+
+  <!-- SIGN IN -->
+  <div class="screen on" id="sSignin">
+    <div style="text-align:center;padding:80px 20px;">
+      <div class="si-logo">⚖️ LEX IQ Live</div>
+      <p class="si-sub">Sign in with Google to host a live quiz room.</p>
+      <div id="gsi-wrap"><div id="gsi-btn"></div></div>
+    </div>
+  </div>
+
+  <!-- SETUP -->
+  <div class="screen" id="sSetup">
+    <h1 class="setup-title">Create a Live Room</h1>
+    <p class="setup-sub">Configure your quiz — players join with a 6-digit code.</p>
+    <div class="form-grid">
+      <div class="field">
+        <label>Constitution Part</label>
+        <select id="selPart">
+          <option value="I">Part I — The Union and Its Territory</option>
+          <option value="II">Part II — Citizenship</option>
+          <option value="III" selected>Part III — Fundamental Rights</option>
+          <option value="IV">Part IV — Directive Principles</option>
+          <option value="IVA">Part IVA — Fundamental Duties</option>
+          <option value="V">Part V — The Union Government</option>
+          <option value="VI">Part VI — The States</option>
+          <option value="VIII">Part VIII — Union Territories</option>
+          <option value="IX">Part IX — The Panchayats</option>
+          <option value="IXA">Part IXA — The Municipalities</option>
+          <option value="X">Part X — Scheduled & Tribal Areas</option>
+          <option value="XI">Part XI — Union-State Relations</option>
+          <option value="XII">Part XII — Finance, Property, Contracts</option>
+          <option value="XV">Part XV — Elections</option>
+          <option value="XVI">Part XVI — Special Provisions</option>
+          <option value="XVII">Part XVII — Official Language</option>
+          <option value="XVIII">Part XVIII — Emergency Provisions</option>
+          <option value="XX">Part XX — Amendment</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Difficulty</label>
+        <select id="selDiff">
+          <option value="easy">🌱 Easy</option>
+          <option value="medium" selected>⚖️ Medium</option>
+          <option value="hard">🔥 Hard</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:16px;">
+      <label>Time per Question (seconds)</label>
+      <div class="q-slider-row">
+        <input type="range" id="slTime" min="10" max="60" value="20" step="5" oninput="document.getElementById('timeVal').textContent=this.value"/>
+        <span class="q-val" id="timeVal">20</span>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:28px;">
+      <label>Number of Questions</label>
+      <div class="q-slider-row">
+        <input type="range" id="slCount" min="5" max="30" value="10" step="5" oninput="document.getElementById('countVal').textContent=this.value"/>
+        <span class="q-val" id="countVal">10</span>
+      </div>
+    </div>
+    <button class="btn-create" onclick="createRoom()">Create Room →</button>
+  </div>
+
+  <!-- LOBBY -->
+  <div class="screen" id="sLobby">
+    <div class="room-code-box">
+      <div class="rc-label">Room Code — Share with players</div>
+      <div class="rc-code" id="roomCodeDisplay">------</div>
+      <div class="rc-url">Players go to: <span id="playUrl"></span></div>
+    </div>
+    <div class="lobby-grid">
+      <div class="lobby-card">
+        <div class="lc-title">Players Joined</div>
+        <div class="player-count" id="playerCount">0</div>
+        <div class="player-sub">waiting in lobby…</div>
+      </div>
+      <div class="lobby-card">
+        <div class="lc-title">Quiz Config</div>
+        <div id="configSummary" style="font-size:.88rem;color:var(--tx2);line-height:2;"></div>
+      </div>
+    </div>
+    <div class="lobby-card" style="margin-bottom:24px;">
+      <div class="lc-title">Players</div>
+      <div id="player-list"></div>
+    </div>
+    <button class="btn-start" id="btnStart" onclick="startQuiz()" disabled>
+      Start Quiz (need at least 1 player)
+    </button>
+  </div>
+
+  <!-- QUESTION (HOST VIEW) -->
+  <div class="screen" id="sQuestion">
+    <div class="q-host-bar">
+      <span class="q-progress-txt" id="qProgressTxt">Question 1 of 10</span>
+      <span class="q-timer-big" id="qTimer">20</span>
+      <span class="q-answered" id="qAnswered">0 answered</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start;">
+      <div>
+        <div class="q-card">
+          <div class="q-num-lbl" id="qLbl">Question 1</div>
+          <div class="q-text-host" id="qTextHost">…</div>
+          <div class="opts-grid" id="optsHost"></div>
+        </div>
+        <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()" style="display:none;">Next Question →</button>
+        <button class="btn-finish-q" id="btnFinishQ" onclick="finishQuiz()" style="display:none;">Finish Quiz ✓</button>
+      </div>
+      <div class="live-lb">
+        <div class="llb-title">Live Leaderboard</div>
+        <div id="liveLb"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINISHED -->
+  <div class="screen" id="sFinished">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:3rem;margin-bottom:12px;">🏆</div>
+      <div class="fin-title">Quiz Complete!</div>
+      <div class="fin-sub" id="finSub">Great game everyone.</div>
+    </div>
+    <div class="podium" id="podium"></div>
+    <div style="text-align:center;">
+      <button class="btn-new-room" onclick="location.reload()">Host New Room</button>
+      <a class="btn-home" href="index.html">Back to Home</a>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"><div class="ti" id="ti"></div></div>
+
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
+import { getDatabase, ref, set, get, push, onValue, off, update, remove }
+                                   from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js';
+
+/* ── FIREBASE ── */
+const FB = initializeApp({
+  apiKey:            "AIzaSyCATZhMEcmOaieOIRpzS4mQUl0B45ewMUk",
+  authDomain:        "lexiq-878c3.firebaseapp.com",
+  databaseURL:       "https://lexiq-878c3-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "lexiq-878c3",
+  storageBucket:     "lexiq-878c3.firebasestorage.app",
+  messagingSenderId: "460685159824",
+  appId:             "1:460685159824:web:9370811dab8bf594719715"
+});
+const DB = getDatabase(FB);
+
+/* ── CONFIG ── */
+const ARENA = 'https://script.google.com/macros/s/AKfycbzPByuIg8prgpVwmwsOwvn7Ptn3vAvhm7pmfwZzdYKfSZSAXSjXrIzECECoeleFLuVA/exec';
+const GID   = '305545954226-dd79hqj2lnatubnhqmfvaou0e4h1sr9q.apps.googleusercontent.com';
+
+/* ── STATE ── */
+let U=null, roomCode=null, roomRef=null, questions=[], curQ=0, timePerQ=20, timerRef=null, playerListener=null, answerListener=null, lbListener=null;
+
+/* ── GSI ── */
+window.initGSI = function(){
+  if(!window.google?.accounts?.id) return;
+  google.accounts.id.initialize({client_id:GID, callback:handleCred, ux_mode:'popup'});
+  google.accounts.id.renderButton(document.getElementById('gsi-btn'),
+    {theme:'filled_black',size:'large',width:300,text:'signin_with',shape:'pill'});
+};
+function handleCred(resp){
+  const p = parseJwt(resp.credential);
+  U = {id:p.sub, name:p.name, email:p.email, picture:p.picture};
+  show('sSetup'); hide('sSignin');
+  toast('Welcome, '+U.name.split(' ')[0]+'!','gold');
+}
+function parseJwt(t){const b=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));}
+
+/* ── CREATE ROOM ── */
+window.createRoom = async function(){
+  if(!U){toast('Please sign in first.');return;}
+  const partId    = document.getElementById('selPart').value;
+  const difficulty= document.getElementById('selDiff').value;
+  const count     = parseInt(document.getElementById('slCount').value);
+  timePerQ        = parseInt(document.getElementById('slTime').value);
+
+  toast('Creating room…');
+  // Fetch questions via JSONP
+  const qs = await fetchQuestionsJSONP(partId, difficulty, count);
+  if(!qs||!qs.length){toast('No questions found. Check your Google Sheet.'); return;}
+  questions = qs;
+
+  // Generate room code
+  roomCode = Math.random().toString(36).slice(2,5).toUpperCase() + Math.floor(Math.random()*900+100);
+  roomRef  = ref(DB, 'rooms/'+roomCode);
+
+  await set(roomRef, {
+    host:     {uid:U.id, name:U.name, pic:U.picture},
+    config:   {partId, difficulty, count:qs.length, timePerQ},
+    status:   'waiting',
+    currentQ: -1,
+    createdAt: Date.now()
+  });
+
+  // Store questions separately (server-side, not exposed yet)
+  await set(ref(DB,'questions/'+roomCode), questions.map(q=>({
+    question:q.question, optionA:q.optionA, optionB:q.optionB,
+    optionC:q.optionC, optionD:q.optionD,
+    correctOption:q.correctOption||q.correct_option||q.CorrectOption,
+    explanation:q.explanation||''
+  })));
+
+  // Show lobby
+  document.getElementById('roomCodeDisplay').textContent = roomCode;
+  document.getElementById('playUrl').textContent = location.origin+location.pathname.replace('live.html','')+'play.html';
+  document.getElementById('configSummary').innerHTML =
+    'Part <b style="color:var(--tx)">'+partId+'</b><br/>'+
+    cap(difficulty)+' difficulty<br/>'+
+    qs.length+' questions<br/>'+
+    timePerQ+'s per question';
+
+  show('sLobby'); hide('sSetup');
+  listenPlayers();
+};
+
+/* ── LISTEN PLAYERS ── */
+function listenPlayers(){
+  const pRef = ref(DB,'rooms/'+roomCode+'/players');
+  playerListener = onValue(pRef, snap=>{
+    const players = snap.val()||{};
+    const arr = Object.values(players);
+    document.getElementById('playerCount').textContent = arr.length;
+    const btnStart = document.getElementById('btnStart');
+    btnStart.disabled = arr.length===0;
+    btnStart.textContent = arr.length===0 ? 'Start Quiz (need at least 1 player)' : 'Start Quiz with '+arr.length+' player'+(arr.length>1?'s':'')+' →';
+
+    const list = document.getElementById('player-list');
+    list.innerHTML = arr.map(p=>`
+      <div class="p-pill new">
+        <img src="${p.pic||'https://ui-avatars.com/api/?name='+encodeURIComponent(p.name)+'&background=1C3FA8&color=C9A44A'}" alt=""/>
+        ${esc(p.name.split(' ')[0])}
+      </div>`).join('');
+  });
+}
+
+/* ── START QUIZ ── */
+window.startQuiz = async function(){
+  if(playerListener){off(ref(DB,'rooms/'+roomCode+'/players'),playerListener);}
+  await update(roomRef,{status:'question',currentQ:0,questionStartTime:Date.now()});
+  showQuestion(0);
+};
+
+/* ── SHOW QUESTION ── */
+function showQuestion(idx){
+  curQ = idx;
+  const q   = questions[idx];
+  const tot = questions.length;
+
+  show('sQuestion'); hide('sLobby');
+
+  document.getElementById('qProgressTxt').textContent = 'Question '+(idx+1)+' of '+tot;
+  document.getElementById('qLbl').textContent         = 'Question '+(idx+1);
+  document.getElementById('qTextHost').textContent    = q.question;
+  document.getElementById('qAnswered').textContent    = '0 answered';
+
+  // Render options (no correct shown yet)
+  const ls=['A','B','C','D'], vs=[q.optionA,q.optionB,q.optionC,q.optionD];
+  document.getElementById('optsHost').innerHTML = ls.map((l,i)=>
+    vs[i]?`<div class="opt-host" id="oh-${l}"><span class="oh-lt">${l}</span><span>${esc(String(vs[i]))}</span></div>`:''
+  ).join('');
+
+  document.getElementById('btnNextQ').style.display    = 'none';
+  document.getElementById('btnFinishQ').style.display  = 'none';
+
+  // Push question state to Firebase
+  update(roomRef,{
+    status:'question', currentQ:idx,
+    questionStartTime: Date.now(),
+    answeredCount:0
+  });
+
+  // Listen for answer count
+  if(answerListener) off(ref(DB,'rooms/'+roomCode+'/answers/'+idx),answerListener);
+  const aRef = ref(DB,'rooms/'+roomCode+'/answers/'+idx);
+  answerListener = onValue(aRef, snap=>{
+    const ans = snap.val()||{};
+    document.getElementById('qAnswered').textContent = Object.keys(ans).length+' answered';
+  });
+
+  // Live leaderboard listener
+  if(lbListener) off(ref(DB,'rooms/'+roomCode+'/scores'),lbListener);
+  const sRef = ref(DB,'rooms/'+roomCode+'/scores');
+  lbListener = onValue(sRef, snap=>renderLiveLb(snap.val()||{}));
+
+  // Timer
+  startTimer(timePerQ, ()=>revealAnswer(idx));
+}
+
+/* ── TIMER ── */
+function startTimer(secs, onDone){
+  clearInterval(timerRef);
+  let remaining = secs;
+  const el = document.getElementById('qTimer');
+  el.textContent = remaining; el.className='q-timer-big';
+  timerRef = setInterval(()=>{
+    remaining--;
+    el.textContent = remaining;
+    el.className   = remaining<=5?'q-timer-big red':'q-timer-big';
+    if(remaining<=0){clearInterval(timerRef);onDone();}
+  },1000);
+  update(roomRef,{timerEndsAt: Date.now()+(secs*1000)});
+}
+
+/* ── REVEAL ANSWER ── */
+async function revealAnswer(idx){
+  clearInterval(timerRef);
+  const q  = questions[idx];
+  const an = String(q.correctOption||q.correct_option||q.CorrectOption||'').toUpperCase().trim();
+
+  // Show correct answer visually
+  ['A','B','C','D'].forEach(l=>{
+    const el = document.getElementById('oh-'+l);
+    if(!el)return;
+    el.classList.add(l===an?'revealed-ok':'revealed-ng');
+  });
+
+  // Tell Firebase to reveal
+  await update(roomRef,{status:'revealed',correctOption:an,explanation:q.explanation||''});
+
+  // Show next/finish button
+  const isLast = idx >= questions.length-1;
+  document.getElementById('btnNextQ').style.display   = isLast?'none':'block';
+  document.getElementById('btnFinishQ').style.display = isLast?'block':'none';
+
+  // Score players
+  await scoreRound(idx, an);
+}
+
+/* ── SCORE ROUND ── */
+async function scoreRound(idx, correctLetter){
+  const snap   = await get(ref(DB,'rooms/'+roomCode+'/answers/'+idx));
+  const answers= snap.val()||{};
+  const qStart = (await get(ref(DB,'rooms/'+roomCode+'/questionStartTime'))).val()||Date.now();
+
+  for(const [uid,data] of Object.entries(answers)){
+    if(data.answer===correctLetter){
+      // Faster answer = more bonus points (max 1000)
+      const elapsed  = (data.ts - qStart)/1000;
+      const pts      = Math.max(100, Math.round(1000*(1-elapsed/(timePerQ*1.5))));
+      const scoreRef = ref(DB,'rooms/'+roomCode+'/scores/'+uid);
+      const prev     = (await get(scoreRef)).val()||{score:0,name:data.name,pic:data.pic};
+      await set(scoreRef,{...prev, score:(prev.score||0)+pts});
+    }
+  }
+}
+
+/* ── NEXT QUESTION ── */
+window.nextQuestion = function(){
+  showQuestion(curQ+1);
+};
+
+/* ── FINISH ── */
+window.finishQuiz = async function(){
+  clearInterval(timerRef);
+  await update(roomRef,{status:'finished'});
+
+  const snap  = await get(ref(DB,'rooms/'+roomCode+'/scores'));
+  const scores= snap.val()||{};
+  const sorted= Object.values(scores).sort((a,b)=>b.score-a.score);
+
+  show('sFinished'); hide('sQuestion');
+  document.getElementById('finSub').textContent = sorted.length+' players competed · Part '+questions[0]?.partId||'';
+
+  const medals=['🥇','🥈','🥉'], sizes=['first','second','third'];
+  const top3 = sorted.slice(0,3);
+  document.getElementById('podium').innerHTML = top3.map((p,i)=>`
+    <div class="pod-box ${sizes[i]||''}">
+      <div class="pod-medal">${medals[i]||i+1}</div>
+      <img class="pod-pic" src="${p.pic||'https://ui-avatars.com/api/?name='+encodeURIComponent(p.name)+'&background=1C3FA8&color=C9A44A'}" alt=""/>
+      <div class="pod-name">${esc(p.name.split(' ')[0])}</div>
+      <div class="pod-score">${p.score} pts</div>
+    </div>`).join('');
+
+  // Cleanup room after 10 min
+  setTimeout(()=>remove(ref(DB,'rooms/'+roomCode)), 600000);
+};
+
+/* ── LIVE LEADERBOARD ── */
+function renderLiveLb(scores){
+  const sorted = Object.values(scores).sort((a,b)=>b.score-a.score).slice(0,8);
+  document.getElementById('liveLb').innerHTML = sorted.length
+    ? sorted.map((p,i)=>`
+        <div class="llb-row">
+          <div class="llb-rank">${i+1}</div>
+          <img class="llb-pic" src="${p.pic||'https://ui-avatars.com/api/?name='+encodeURIComponent(p.name)+'&background=1C3FA8&color=C9A44A'}" alt=""/>
+          <div class="llb-name">${esc(p.name.split(' ')[0])}</div>
+          <div class="llb-score">${p.score}</div>
+        </div>`).join('')
+    : '<div style="color:var(--tx3);font-size:.84rem;padding:12px 0;">Waiting for answers…</div>';
+}
+
+/* ── FETCH QUESTIONS (JSONP) ── */
+function fetchQuestionsJSONP(partId, difficulty, count){
+  return new Promise((resolve)=>{
+    const cb = '_lqjp'+Date.now();
+    const tid = setTimeout(()=>{delete window[cb];resolve([]);toast('Timeout fetching questions.','red');},15000);
+    window[cb] = d=>{clearTimeout(tid);delete window[cb];resolve(d.questions||[]);};
+    const s=document.createElement('script');
+    s.src=ARENA+'?callback='+cb+'&action=get_questions&partId='+encodeURIComponent(partId)+'&difficulty='+encodeURIComponent(difficulty)+'&count='+encodeURIComponent(count);
+    document.head.appendChild(s);
+  });
+}
+
+/* ── UTILS ── */
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+function hide(id){document.getElementById(id).classList.remove('on');}
+function cap(s){return s?s[0].toUpperCase()+s.slice(1):'';}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+let tt;function toast(msg,type=''){const e=document.getElementById('ti');e.textContent=msg;e.className='ti show'+(type?' '+type:'');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),3000);}
+</script>
+</body>
+</html>

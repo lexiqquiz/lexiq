@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
-<script async src="https://accounts.google.com/gsi/client" onload="initGSI()"></script>
+<script src="https://accounts.google.com/gsi/client" onload="initGSI()" defer></script>
 <style>
 :root{
   --bg:#07090F;--surf:#0C1018;--card:#101520;--card2:#141B27;
@@ -38,6 +38,9 @@ img{max-width:100%;display:block;}
 .n-links{display:flex;align-items:center;gap:4px;margin-left:auto;list-style:none;}
 .n-links a{color:var(--tx2);font-size:.85rem;font-weight:500;padding:7px 15px;border-radius:30px;transition:.2s;}
 .n-links a:hover{color:var(--gold);background:var(--goldd);}
+.n-live-link{display:flex!important;align-items:center;gap:7px;background:rgba(239,68,68,.1)!important;border:1px solid rgba(239,68,68,.3);color:#EF4444!important;font-size:.78rem!important;font-weight:700!important;padding:6px 14px!important;border-radius:20px!important;letter-spacing:.5px;}
+.n-live-link:hover{background:rgba(239,68,68,.18)!important;color:#EF4444!important;}
+.nlive-dot{width:6px;height:6px;border-radius:50%;background:#EF4444;display:inline-block;animation:pulse 1.2s ease-in-out infinite;flex-shrink:0;}
 #n-auth{margin-left:16px;display:flex;align-items:center;gap:10px;}
 #btn-snav{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;font-size:.85rem;padding:9px 22px;border-radius:30px;transition:.25s;box-shadow:0 4px 16px rgba(201,164,74,.3);}
 #btn-snav:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,164,74,.45);}
@@ -61,6 +64,8 @@ img{max-width:100%;display:block;}
 .btn-gold:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(201,164,74,.5);}
 .btn-outline{color:var(--tx2);font-weight:500;font-size:.95rem;padding:14px 28px;border-radius:50px;border:1.5px solid rgba(255,255,255,.1);transition:.25s;}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold);background:var(--goldd);}
+.btn-live-hero{display:inline-flex;align-items:center;gap:8px;color:#EF4444;font-weight:600;font-size:.95rem;padding:14px 24px;border-radius:50px;border:1.5px solid rgba(239,68,68,.3);background:rgba(239,68,68,.07);transition:.25s;}
+.btn-live-hero:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.5);}
 .h-stats{display:flex;align-items:center;justify-content:center;gap:56px;margin-top:76px;padding-top:52px;border-top:1px solid var(--bdr);animation:fu 1s .5s ease both;flex-wrap:wrap;}
 .h-snum{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--gold);letter-spacing:-1px;line-height:1;}
 .h-slbl{font-size:.76rem;color:var(--tx3);text-transform:uppercase;letter-spacing:1.5px;margin-top:5px;}
@@ -206,6 +211,7 @@ footer{background:var(--surf);border-top:1px solid var(--bdr);padding:48px 48px 
   <ul class="n-links">
     <li><a href="#parts">Quizzes</a></li>
     <li><a href="#lb">Leaderboard</a></li>
+    <li><a href="live.html" class="n-live-link"><span class="nlive-dot"></span>Live Room</a></li>
   </ul>
   <div id="n-auth">
     <button id="btn-snav" onclick="openSignIn()">Sign In with Google</button>
@@ -225,6 +231,7 @@ footer{background:var(--surf);border-top:1px solid var(--bdr);padding:48px 48px 
     <div class="h-cta">
       <button class="btn-gold" onclick="startExploring()">⚖️ Start Quizzing</button>
       <button class="btn-outline" onclick="document.getElementById('lb').scrollIntoView({behavior:'smooth'})">View Leaderboard</button>
+      <a href="live.html" class="btn-live-hero"><span class="nlive-dot" style="margin-right:2px"></span>Join Live Room</a>
     </div>
     <div class="h-stats">
       <div><div class="h-snum">22</div><div class="h-slbl">Constitution Parts</div></div>
@@ -384,17 +391,26 @@ let U=null, selPart=null, selDiff='medium', ttimer=null;
 
 /* GSI */
 function initGSI(){
-  if(!window.google)return;
+  if(!window.google?.accounts?.id)return;
   google.accounts.id.initialize({client_id:GID,callback:handleCred,auto_select:false,cancel_on_tap_outside:true,ux_mode:'popup'});
-  renderGSI();
   window._gsiOk=true;
+  renderGSI();
 }
 function renderGSI(){
-  if(!window.google||!window._gsiOk&&!window.google?.accounts)return;
+  if(!window.google?.accounts?.id||!window._gsiOk)return;
+  const el=document.getElementById('gsi-btn');
+  if(!el)return;
+  el.innerHTML=''; // clear any stale render
   try{
-    google.accounts.id.renderButton(document.getElementById('gsi-btn'),
-      {theme:'filled_black',size:'large',width:320,text:'signin_with',shape:'pill',logo_alignment:'left'});
-  }catch(e){}
+    google.accounts.id.renderButton(el,{theme:'filled_black',size:'large',width:320,text:'signin_with',shape:'pill',logo_alignment:'left'});
+  }catch(e){
+    // Fallback: manual OAuth popup
+    el.innerHTML=`<button onclick="oauthFallback()" style="display:flex;align-items:center;gap:12px;background:#fff;color:#1f1f1f;border:none;border-radius:50px;padding:12px 24px;font-size:.95rem;font-weight:600;cursor:pointer;width:100%;justify-content:center;font-family:'DM Sans',sans-serif;"><svg width='20' height='20' viewBox='0 0 48 48'><path fill='#EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/><path fill='#4285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/><path fill='#FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'/><path fill='#34A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'/></svg>Sign in with Google</button>`;
+  }
+}
+function oauthFallback(){
+  const url='https://accounts.google.com/o/oauth2/v2/auth?client_id='+encodeURIComponent(GID)+'&redirect_uri='+encodeURIComponent(location.origin+location.pathname)+'&response_type=token&scope=openid%20email%20profile&prompt=select_account';
+  window.open(url,'_blank','width=500,height=600');
 }
 function handleCred(resp){
   try{
@@ -455,7 +471,20 @@ function updatePrivacy(k,v){
 }
 function openSignIn(){
   openModal('mSignin');
-  setTimeout(()=>{if(window.google&&window._gsiOk)renderGSI();},120);
+  // Try immediately, then retry every 300ms for up to 3s
+  let attempts=0;
+  const tryRender=()=>{
+    if(window.google?.accounts?.id&&window._gsiOk){renderGSI();return;}
+    if(++attempts<10)setTimeout(tryRender,300);
+    else{
+      // GSI script never loaded — show manual button
+      const el=document.getElementById('gsi-btn');
+      if(el&&!el.innerHTML){
+        el.innerHTML=`<button onclick="oauthFallback()" style="display:flex;align-items:center;gap:12px;background:#fff;color:#1f1f1f;border:none;border-radius:50px;padding:12px 24px;font-size:.95rem;font-weight:600;cursor:pointer;width:100%;justify-content:center;font-family:'DM Sans',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.3);"><svg width='20' height='20' viewBox='0 0 48 48'><path fill='#EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/><path fill='#4285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/><path fill='#FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'/><path fill='#34A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'/></svg>Sign in with Google</button>`;
+      }
+    }
+  };
+  setTimeout(tryRender,100);
 }
 
 /* PARTS */
