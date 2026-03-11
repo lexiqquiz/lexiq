@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://accounts.google.com/gsi/client" defer onload="initGSI()"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 /* ══════════════════════════════════════════
    DESIGN TOKENS — DARK PRESTIGE
@@ -90,8 +90,8 @@ img{max-width:100%;display:block;}
   mask-image:radial-gradient(ellipse 80% 65% at 50% 50%,black 20%,transparent 100%);}
 .hero-ring{position:absolute;border-radius:50%;border:1px solid rgba(201,164,74,.055);pointer-events:none;
   top:50%;left:50%;animation:spinRing linear infinite;}
-.hero-ring:nth-child(3){width:580px;height:580px;transform:translate(-50%,-50%);animation-duration:55s;}
-.hero-ring:nth-child(4){width:820px;height:820px;transform:translate(-50%,-50%);animation-duration:85s;animation-direction:reverse;border-color:rgba(201,164,74,.03);}
+.hero-ring:nth-of-type(1){width:580px;height:580px;transform:translate(-50%,-50%);animation-duration:55s;}
+.hero-ring:nth-of-type(2){width:820px;height:820px;transform:translate(-50%,-50%);animation-duration:85s;animation-direction:reverse;border-color:rgba(201,164,74,.03);}
 @keyframes spinRing{to{transform:translate(-50%,-50%) rotate(360deg);}}
 .particles-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
 .p-dot{position:absolute;border-radius:50%;background:var(--gold);opacity:0;animation:floatUp linear infinite;}
@@ -107,7 +107,7 @@ img{max-width:100%;display:block;}
 .h-title em{color:var(--gold);font-style:italic;}
 .h-rule{width:56px;height:1px;background:var(--bdr2);margin:0 auto 22px;animation:riseIn .7s .22s ease both;}
 .h-sub{font-family:var(--font-disp);font-size:clamp(.85rem,1.8vw,1.05rem);letter-spacing:7px;
-  color:var(--tx3);text-transform:uppercase;margin-bottom:30px;animation:riseIn .7s .28s ease both;}
+  color:var(--tx2);text-transform:uppercase;margin-bottom:30px;animation:riseIn .7s .28s ease both;}
 .h-desc{font-size:.98rem;color:var(--tx2);max-width:560px;margin:0 auto 50px;
   font-weight:300;line-height:1.88;animation:riseIn .7s .38s ease both;}
 .h-cta{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;animation:riseIn .7s .48s ease both;}
@@ -130,7 +130,7 @@ img{max-width:100%;display:block;}
 .stat-c{flex:1;max-width:200px;text-align:center;padding:18px 20px;border-right:1px solid var(--bdr);}
 .stat-c:last-child{border-right:none;}
 .stat-n{font-family:var(--font-disp);font-size:1.85rem;color:var(--gold);letter-spacing:1px;}
-.stat-l{font-size:.65rem;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.stat-l{font-size:.65rem;color:var(--tx2);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
 
 /* ══ SECTION BASE ══ */
 section{padding:96px 48px;position:relative;}
@@ -140,12 +140,15 @@ section{padding:96px 48px;position:relative;}
 .sec-hd.ctr .sec-sub{margin:0 auto;}
 .sec-eye{display:inline-flex;align-items:center;gap:10px;font-size:.65rem;font-weight:600;
   letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
-.sec-eye::before{content:'';width:16px;height:1px;background:var(--bdr2);}
+.sec-eye::before{content:'';width:16px;height:1px;background:var(--gold);opacity:.5;}
 .sec-title{font-family:var(--font-serif);font-size:clamp(2rem,4.5vw,3rem);
   font-weight:700;line-height:1.07;letter-spacing:-1px;color:var(--tx);margin-bottom:14px;}
 .sec-sub{font-size:.93rem;color:var(--tx2);max-width:520px;line-height:1.82;}
-.reveal{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s ease;}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
 .reveal.on{opacity:1;transform:none;}
+/* Guaranteed fallback: force-show all reveal elements after 3s */
+@keyframes forceReveal{0%{opacity:0;transform:translateY(22px);}100%{opacity:1;transform:none;}}
+.reveal{animation:forceReveal 0.6s 3s both;}
 .d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}.d4{transition-delay:.28s;}
 
 /* ══ HOW IT WORKS ══ */
@@ -185,7 +188,7 @@ section{padding:96px 48px;position:relative;}
 .qname{font-family:var(--font-serif);font-size:1.25rem;font-weight:600;color:var(--tx);margin-bottom:9px;line-height:1.25;}
 .qdesc{font-size:.82rem;color:var(--tx2);line-height:1.7;margin-bottom:16px;}
 .qbadges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;}
-.qbadge{font-size:.65rem;color:var(--tx3);background:var(--surf);border:1px solid var(--bdr);padding:2px 9px;border-radius:3px;}
+.qbadge{font-size:.65rem;color:var(--tx2);background:var(--surf);border:1px solid var(--bdr);padding:2px 9px;border-radius:3px;}
 .btn-qcard{width:100%;padding:11px;border-radius:var(--r);font-size:.8rem;font-weight:600;
   letter-spacing:.4px;transition:var(--tr);background:var(--goldd);border:1px solid var(--bdr2);
   color:var(--gold);display:flex;align-items:center;justify-content:center;gap:5px;}
@@ -216,12 +219,12 @@ section{padding:96px 48px;position:relative;}
   padding:2px 7px;border-radius:3px;margin-bottom:10px;width:fit-content;}
 .pcard-title{font-family:var(--font-serif);font-size:.98rem;font-weight:600;color:var(--tx);
   line-height:1.3;margin-bottom:5px;flex:1;}
-.pcard-arts{font-size:.72rem;color:var(--tx3);margin-bottom:11px;}
+.pcard-arts{font-size:.72rem;color:var(--tx2);margin-bottom:11px;}
 .pcard-topics{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;}
-.tpill{font-size:.63rem;color:var(--tx3);background:var(--surf);
-  border:1px solid rgba(255,255,255,.04);padding:2px 7px;border-radius:3px;}
+.tpill{font-size:.63rem;color:var(--tx2);background:var(--surf);
+  border:1px solid var(--bdr);padding:2px 7px;border-radius:3px;}
 .btn-pcard{width:100%;text-align:center;padding:8px;border:1px solid var(--bdr);border-radius:6px;
-  font-size:.76rem;font-weight:600;color:var(--tx3);background:transparent;transition:var(--tr);}
+  font-size:.76rem;font-weight:600;color:var(--tx2);background:transparent;transition:var(--tr);}
 .pcard:hover .btn-pcard{border-color:var(--bdr2);color:var(--gold);background:var(--goldd);}
 
 /* ══ FEATURES ══ */
@@ -242,7 +245,7 @@ section{padding:96px 48px;position:relative;}
 .lb-tab.on,.lb-tab:hover{background:var(--goldd);border-color:var(--bdr2);color:var(--gold);}
 .lb-tbl{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;}
 .lb-hd{display:grid;grid-template-columns:58px 1fr 105px 76px;padding:11px 18px;border-bottom:1px solid var(--bdr);}
-.lb-hd span{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);}
+.lb-hd span{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);}
 .lb-row{display:grid;grid-template-columns:58px 1fr 105px 76px;padding:12px 18px;align-items:center;
   border-bottom:1px solid rgba(255,255,255,.03);transition:background var(--tr);}
 .lb-row:last-child{border:none;}
@@ -253,7 +256,7 @@ section{padding:96px 48px;position:relative;}
 .lb-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:var(--royal);border:1px solid var(--bdr);
   display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:.88rem;color:var(--tx);overflow:hidden;}
 .lb-nm{font-size:.86rem;font-weight:500;color:var(--tx);}
-.lb-tm{font-size:.76rem;color:var(--tx3);}
+.lb-tm{font-size:.76rem;color:var(--tx2);}
 .lb-sc{font-family:var(--font-disp);font-size:1.45rem;color:var(--gold);}
 .lb-empty{text-align:center;padding:48px;color:var(--tx3);font-size:.88rem;}
 .shimmer{background:linear-gradient(90deg,rgba(255,255,255,.02) 25%,rgba(255,255,255,.05) 50%,rgba(255,255,255,.02) 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:var(--r);}
@@ -291,7 +294,7 @@ footer{background:var(--surf);border-top:1px solid var(--bdr);padding:60px 48px 
 .ft-col a{font-size:.8rem;color:var(--tx2);transition:var(--tr);}
 .ft-col a:hover{color:var(--gold);}
 .ft-btm{padding-top:24px;border-top:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-.ft-copy{font-size:.72rem;color:var(--tx3);}
+.ft-copy{font-size:.72rem;color:var(--tx2);opacity:.6;}
 @media(max-width:820px){.ft-top{grid-template-columns:1fr 1fr;}.ft-brand{grid-column:1/-1;}}
 @media(max-width:540px){.ft-top{grid-template-columns:1fr;}footer{padding:48px 22px 24px;}section{padding:78px 22px;}}
 
@@ -324,7 +327,7 @@ footer{background:var(--surf);border-top:1px solid var(--bdr);padding:60px 48px 
   color:var(--tx);font-size:.88rem;font-weight:600;transition:var(--tr);cursor:pointer;font-family:var(--font-sans);}
 .btn-google:hover{border-color:var(--bdr2);background:var(--card2);}
 .g-ic{width:20px;height:20px;}
-#gsi-box{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden;}
+/* gsi-box is now a visible render target for the Google button */
 .m-fine{font-size:.7rem;color:var(--tx3);text-align:center;margin-top:14px;line-height:1.6;}
 .m-fine a{color:var(--gold);}
 .cfg-lbl{font-size:.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx2);margin-bottom:11px;display:block;}
@@ -341,13 +344,13 @@ footer{background:var(--surf);border-top:1px solid var(--bdr);padding:60px 48px 
 .btn-start:hover{opacity:.9;transform:translateY(-1px);}
 .p-av{width:72px;height:72px;border-radius:50%;border:2px solid var(--bdr2);margin:0 auto 12px;display:block;object-fit:cover;}
 .p-name{font-family:var(--font-serif);font-size:1.35rem;font-weight:700;text-align:center;color:var(--tx);}
-.p-email{font-size:.8rem;color:var(--tx3);text-align:center;margin-top:4px;}
+.p-email{font-size:.8rem;color:var(--tx2);text-align:center;margin-top:4px;}
 .p-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0;}
 .p-stat{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:13px 9px;text-align:center;}
 .p-stat-n{font-family:var(--font-disp);font-size:1.55rem;color:var(--gold);}
-.p-stat-l{font-size:.62rem;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.p-stat-l{font-size:.62rem;color:var(--tx2);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
 .priv-box{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:15px;}
-.priv-lbl{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx3);margin-bottom:12px;}
+.priv-lbl{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:12px;}
 .priv-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);}
 .priv-row:last-child{border:none;}
 .priv-txt{font-size:.82rem;color:var(--tx2);}
@@ -573,11 +576,28 @@ footer{background:var(--surf);border-top:1px solid var(--bdr);padding:60px 48px 
       <div class="m-ben"><div class="m-ben-ic">📊</div><div class="m-ben-txt">View your full quiz history, score trends, and analytics.</div></div>
       <div class="m-ben"><div class="m-ben-ic">☁</div><div class="m-ben-txt">Progress synced across all your devices — phone, tablet, desktop.</div></div>
       <div class="m-div">Sign in with</div>
-      <div id="gsi-box"></div>
-      <button class="btn-google" onclick="initiateGoogleSignIn()" type="button">
-        <svg class="g-ic" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Continue with Google
-      </button>
+      <div id="gsi-box" style="width:100%;min-height:44px;display:flex;justify-content:center;margin-bottom:4px;">
+        <div id="g_id_onload"
+          data-client_id="305545954226-dd79hqj2lnatubnhqmfvaou0e4h1sr9q.apps.googleusercontent.com"
+          data-callback="handleCred"
+          data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+          data-type="standard"
+          data-size="large"
+          data-theme="outline"
+          data-text="signin_with"
+          data-shape="rectangular"
+          data-logo_alignment="left"
+          data-width="400">
+        </div>
+      </div>
+      <div id="gsi-fallback-btn" style="display:none;">
+        <button class="btn-google" onclick="initiateGoogleSignIn()" type="button">
+          <svg class="g-ic" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Continue with Google
+        </button>
+      </div>
       <p class="m-fine">By signing in you agree to our Terms of Service. We only access your name, email, and profile picture.</p>
     </div>
   </div>
@@ -675,21 +695,55 @@ let U=null, selPart=null, selDiff='medium', activeLbPart='III', toastT=null, rev
 ═══════════════════════════════════ */
 function initGSI(){
   if(!window.google?.accounts?.id)return;
-  google.accounts.id.initialize({client_id:GID,callback:handleCred,auto_select:false,cancel_on_tap_outside:true,ux_mode:'popup'});
+  google.accounts.id.initialize({
+    client_id:GID,
+    callback:handleCred,
+    auto_select:false,
+    cancel_on_tap_outside:true,
+    ux_mode:'popup'
+  });
   window._gsiOk=true;
-  try{google.accounts.id.renderButton(document.getElementById('gsi-box'),{theme:'outline',size:'large',width:1,text:'signin_with'});}catch(e){}
+  // Render the real Google Sign-In button into the modal container
+  try{
+    const container=document.getElementById('gsi-box');
+    if(container){
+      google.accounts.id.renderButton(container,{
+        theme:'outline',
+        size:'large',
+        width:400,
+        text:'signin_with',
+        shape:'rectangular',
+        logo_alignment:'center'
+      });
+    }
+  }catch(e){
+    // If render fails, show fallback button
+    const fb=document.getElementById('gsi-fallback-btn');
+    if(fb)fb.style.display='block';
+  }
 }
 function initiateGoogleSignIn(){
-  if(window._gsiOk&&window.google){
-    try{
-      google.accounts.id.prompt(n=>{
-        if(n.isNotDisplayed()||n.isSkippedMoment()){
-          const ifr=document.querySelector('#gsi-box iframe');
-          if(ifr){ifr.contentWindow.document.querySelector('[role=button]')?.click();}
-        }
-      });
-    }catch(e){}
+  // This is only called from the fallback button
+  if(!window._gsiOk||!window.google){
+    toast('Google Sign-In not ready. Please refresh.','red');
+    return;
   }
+  // Try One Tap prompt
+  try{
+    google.accounts.id.prompt(n=>{
+      if(n.isNotDisplayed()||n.isSkippedMoment()){
+        // One Tap blocked — open OAuth popup directly
+        const params=new URLSearchParams({
+          client_id:GID,
+          redirect_uri:window.location.origin+window.location.pathname,
+          response_type:'token',
+          scope:'openid email profile',
+          prompt:'select_account'
+        });
+        window.open('https://accounts.google.com/o/oauth2/v2/auth?'+params,'_blank','width=500,height=600');
+      }
+    });
+  }catch(e){toast('Sign-in error. Please try again.','red');}
 }
 function handleCred(res){
   try{
@@ -709,6 +763,18 @@ function restore(){
   const s=localStorage.getItem('lexiq_user');
   if(!s)return;
   try{U=JSON.parse(s);onSignedIn();regUser(U);const pd=sessionStorage.getItem('pendingPart');if(pd){sessionStorage.removeItem('pendingPart');setTimeout(()=>openCfg(pd),600);}}catch(e){localStorage.removeItem('lexiq_user');}
+}
+// Poll for Google Identity Services to load (handles async/defer timing)
+function waitForGSI(retries){
+  if(window.google&&window.google.accounts&&window.google.accounts.id){
+    initGSI();
+  } else if(retries>0){
+    setTimeout(()=>waitForGSI(retries-1),300);
+  } else {
+    // GSI failed to load — show fallback button
+    const fb=document.getElementById('gsi-fallback-btn');
+    if(fb)fb.style.display='block';
+  }
 }
 function onSignedIn(){
   document.getElementById('signin-nav-area').style.display='none';
@@ -839,7 +905,29 @@ function post(url,action,data={}){return fetch(url,{method:'POST',headers:{'Cont
 ═══════════════════════════════════ */
 function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
 function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
-function openSignInModal(){openModal('signinModal');}
+function openSignInModal(){
+  openModal('signinModal');
+  // Re-render GSI button each time modal opens (handles hidden container timing)
+  if(window.google&&window.google.accounts&&window.google.accounts.id&&window._gsiOk){
+    try{
+      const c=document.getElementById('gsi-box');
+      if(c&&!c.querySelector('iframe')){
+        google.accounts.id.renderButton(c,{theme:'outline',size:'large',width:400,text:'signin_with',shape:'rectangular'});
+      }
+    }catch(e){
+      const fb=document.getElementById('gsi-fallback-btn');
+      if(fb)fb.style.display='block';
+    }
+  } else {
+    // GSI not ready yet - show fallback
+    setTimeout(()=>{
+      if(!document.querySelector('#gsi-box iframe')){
+        const fb=document.getElementById('gsi-fallback-btn');
+        if(fb)fb.style.display='block';
+      }
+    },800);
+  }
+}
 function openProfileModal(){if(!U){openSignInModal();return;}fetchStats();openModal('profileModal');}
 document.querySelectorAll('.modal-bd').forEach(bd=>bd.addEventListener('click',e=>{if(e.target===bd){bd.classList.remove('open');document.body.style.overflow='';}}));
 
@@ -880,23 +968,34 @@ function spawnParticles(){
    SCROLL REVEALS & NAV
 ═══════════════════════════════════ */
 function setupReveal(){
-  window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>50));
+  window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50));
+  // Use threshold:0 and rootMargin so elements trigger as soon as ANY pixel enters viewport
   revObs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');revObs.unobserve(e.target);}});
-  },{threshold:.08});
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        revObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+  // Nuclear fallback: force-show everything after 3.5s no matter what
+  setTimeout(()=>{
+    document.querySelectorAll('.reveal:not(.on)').forEach(el=>el.classList.add('on'));
+  },3500);
 }
 
 /* ═══════════════════════════════════
    INIT
 ═══════════════════════════════════ */
 window.addEventListener('load',()=>{
+  setupReveal();    // MUST run first so revObs exists before renderParts adds elements
   renderParts(PARTS);
-  setupReveal();
   spawnParticles();
   countUp('stat-users',1247);
   initLb();
   restore();
+  waitForGSI(20);  // Try up to 20 times (6 seconds) for GSI to load
 });
 </script>
 </body>
