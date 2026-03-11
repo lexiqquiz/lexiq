@@ -762,11 +762,10 @@ footer {
     <p class="hero-tagline">Test &nbsp;·&nbsp; Learn &nbsp;·&nbsp; Dominate</p>
     <p class="hero-desc">Master Indian Constitutional Law through adaptive quizzes, real-time leaderboards, and live room competitions. Built for serious legal minds.</p>
     <div class="hero-cta">
-      <button class="btn-primary" onclick="scrollTo('quiz-sections')">⚖ Start Quizzing</button>
-      <button class="btn-secondary" onclick="scrollTo('how-it-works')">How It Works</button>
+      <button class="btn-primary" onclick="scrollToSection('quiz-sections')">⚖ Start Quizzing</button>
+      <button class="btn-secondary" onclick="scrollToSection('how-it-works')">How It Works</button>
       <a href="live.html" class="btn-live"><span class="pulse"></span>Live Room</a>
     </div>
-  </div>
 
   <div class="hero-statsbar">
     <div class="stat-item"><div class="stat-num" id="stat-users">0</div><div class="stat-lbl">Active Learners</div></div>
@@ -807,7 +806,7 @@ footer {
     </div>
     <div class="quiz-grid">
 
-      <div class="quiz-card" onclick="scrollTo('constitution')">
+      <div class="quiz-card" onclick="scrollToSection('constitution')">
         <div class="card-banner">
           <div class="card-banner-glow"></div>
           <div class="tag-live"><span class="pulse"></span>Live Now</div>
@@ -818,7 +817,7 @@ footer {
           <h3 class="card-title">Constitutional Law</h3>
           <p class="card-desc">All 22 Parts of the Indian Constitution — from Fundamental Rights to Emergency Provisions.</p>
           <div class="card-tags"><span class="ctag">22 Parts</span><span class="ctag">Adaptive</span><span class="ctag">Leaderboard</span></div>
-          <button class="btn-card">Explore Parts →</button>
+          <button class="btn-card" onclick="scrollToSection('constitution'); event.stopPropagation();">Explore Parts →</button>
         </div>
       </div>
 
@@ -1530,7 +1529,7 @@ function countUp(elementId, target) {
   }, 30);
 }
 
-function scrollTo(id) {
+function scrollToSection(id) {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
