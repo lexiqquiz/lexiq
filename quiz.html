@@ -208,7 +208,7 @@ function boot(){
 
 function jsonp(url,params,ok,err){
   const cb='_jp'+(++jpn)+'_'+Date.now();
-  const tid=setTimeout(()=>{cleanup(cb);err('15s timeout — Apps Script did not respond.\n\nFix:\n1. Paste ARENA_SCRIPT_V2.gs into your Arena Apps Script\n2. New Deployment → Web App → Execute as Me → Anyone\n3. Update ARENA constant in quiz.html');},15000);
+  const tid=setTimeout(()=>{cleanup(cb);err('15s timeout — Apps Script did not respond.\n\nFix:\n1. Paste ARENA_SCRIPT_V2.gs into your Arena Apps Script\n2. New Deployment → Web App → Execute as Me → Anyone\n3. Update ARENA constant in quiz.html');},10000);
   window[cb]=d=>{clearTimeout(tid);cleanup(cb);L('jsonp ok, keys:'+Object.keys(d));ok(d);};
   let qs='?callback='+cb;for(const k in params)qs+='&'+encodeURIComponent(k)+'='+encodeURIComponent(params[k]);
   L('jsonp: '+url+qs.slice(0,100));
@@ -233,13 +233,33 @@ function fetchQs(){
     e=>{
       L('jsonp fail:'+e);step('Trying fetch fallback…');
       const url=ARENA+'?action=get_questions&partId='+encodeURIComponent(params.partId)+'&difficulty='+encodeURIComponent(params.difficulty)+'&count='+encodeURIComponent(params.count);
-      fetch(url).then(r=>r.text()).then(txt=>{
+      fetch(url,{redirect:'follow'}).then(r=>r.text()).then(txt=>{
+        // Strip JSONP wrapper if present: callback({...}) → {...}
+        let cleaned = txt.trim();
+        if(cleaned.startsWith('/*')) cleaned = cleaned.replace(/^\/\*[\s\S]*?\*\/\s*/, '');
+        const jsonpMatch = cleaned.match(/^[\w$]+\(([\s\S]*)\)\s*;?\s*$/);
+        if(jsonpMatch) cleaned = jsonpMatch[1];
+        txt = cleaned;
         L('fetch raw:'+txt.slice(0,150));
         const d=JSON.parse(txt);
         const arr=d.questions||[];
         if(!arr.length)throw new Error('0 questions. '+txt.slice(0,200));
         Q=arr;startQuiz();
-      }).catch(fe=>{fail('Cannot load questions — both JSONP and fetch failed.\n\nFix:\n1. Paste ARENA_SCRIPT_V2.gs into Arena Apps Script\n2. New Deployment → Web App → Execute as Me → Anyone\n3. Update ARENA URL in quiz.html','JSONP: '+e+'\nFetch: '+fe+'\nURL: '+url+'\n\nLog:\n'+logs.join('\n'));});
+      }).catch(fe=>{
+          // Last resort: retry fetch once more
+          step('Retrying connection…');
+          setTimeout(()=>{
+            fetch(url).then(r=>r.text()).then(txt=>{
+              let cl=txt.trim();const m=cl.match(/^[\w$]+\(([\s\S]*)\)\s*;?\s*$/);if(m)cl=m[1];
+              try{
+                const d=JSON.parse(cl);
+                const arr=d.questions||d.data||[];
+                if(!arr.length)return fail('0 questions for Part '+params.partId+' ('+params.difficulty+').\n\nCheck Questions sheet has data for this Part and difficulty.','resp:'+JSON.stringify(d).slice(0,200));
+                startQuiz(arr);
+              }catch(pe){fail('Question load failed. Check your Apps Script is deployed correctly.','Parse error: '+pe+'\nRaw: '+cl.slice(0,200)+'\nJSONP err: '+e);}
+            }).catch(fe2=>{fail('Cannot reach the quiz server. Check your Apps Script deployment.\n\nFix: In Apps Script → Deploy → Manage Deployments → Web App → Execute as: Me, Who can access: Anyone','JSONP: '+e+'\nFetch: '+fe+'\nRetry: '+fe2+'\nURL: '+url);});
+          }, 2000);
+        });
     }
   );
 }
