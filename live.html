@@ -283,6 +283,7 @@ input[type=range]{flex:1;accent-color:var(--gold);height:4px;}
 
 <div id="toast"><div class="ti" id="ti"></div></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module">
 import { initializeApp }           from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
 import { getDatabase, ref, set, get, push, onValue, off, update, remove }
@@ -301,7 +302,9 @@ const FB = initializeApp({
 const DB = getDatabase(FB);
 
 /* ── CONFIG ── */
-const ARENA = 'https://script.google.com/macros/s/AKfycby5u30MXyjKTu2R7oa9Qb-B-CXaliV8hXlr1MhfezUSVFz9THXmCH5b2eZdJlp4t2L3/exec';
+const SUPA_URL = 'https://djbtfuuixptxffnotlgj.supabase.co';
+const SUPA_KEY = 'sb_publishable_csSa9w-AWydj2G9fo-GnIA_HSK_8Ce7';
+const db = supabase.createClient(SUPA_URL, SUPA_KEY);
 const GID   = '305545954226-dd79hqj2lnatubnhqmfvaou0e4h1sr9q.apps.googleusercontent.com';
 
 /* ── STATE ── */
@@ -355,8 +358,8 @@ window.createRoom = async function(){
 
   toast('Creating room…');
   // Fetch questions via JSONP
-  const qs = await fetchQuestionsJSONP(partId, difficulty, count);
-  if(!qs||!qs.length){toast('No questions found. Check your Google Sheet.'); return;}
+  const qs = await fetchQuestionsSupabase(partId, difficulty, count);
+  if(!qs||!qs.length){toast('No questions found for this Part/difficulty.','red'); return;}
   questions = qs;
 
   // Generate room code
@@ -568,16 +571,31 @@ function renderLiveLb(scores){
     : '<div style="color:var(--tx3);font-size:.84rem;padding:12px 0;">Waiting for answers…</div>';
 }
 
-/* ── FETCH QUESTIONS (JSONP) ── */
-function fetchQuestionsJSONP(partId, difficulty, count){
-  return new Promise((resolve)=>{
-    const cb = '_lqjp'+Date.now();
-    const tid = setTimeout(()=>{delete window[cb];resolve([]);toast('Timeout fetching questions.','red');},15000);
-    window[cb] = d=>{clearTimeout(tid);delete window[cb];resolve(d.questions||[]);};
-    const s=document.createElement('script');
-    s.src=ARENA+'?callback='+cb+'&action=get_questions&partId='+encodeURIComponent(partId)+'&difficulty='+encodeURIComponent(difficulty)+'&count='+encodeURIComponent(count);
-    document.head.appendChild(s);
-  });
+/* ── FETCH QUESTIONS (SUPABASE) ── */
+async function fetchQuestionsSupabase(partId, difficulty, count){
+  try{
+    const {data,error} = await db
+      .from('questions')
+      .select('*')
+      .eq('part_id', partId)
+      .eq('difficulty', difficulty)
+      .limit(count);
+    if(error){toast('DB error: '+error.message,'red');return [];}
+    if(!data||!data.length){toast('No questions: Part '+partId+' ('+difficulty+')','red');return [];}
+    // Shuffle and map to the format live room expects
+    return data.sort(()=>Math.random()-.5).map(q=>({
+      question:      q.question,
+      optionA:       q.option_a,
+      optionB:       q.option_b,
+      optionC:       q.option_c,
+      optionD:       q.option_d,
+      correctOption: q.answer,
+      explanation:   q.explanation||''
+    }));
+  }catch(e){
+    toast('Failed to load questions: '+e.message,'red');
+    return [];
+  }
 }
 
 /* ── UTILS ── */

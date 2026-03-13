@@ -175,9 +175,13 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;background:no
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const ARENA='https://script.google.com/macros/s/AKfycby5u30MXyjKTu2R7oa9Qb-B-CXaliV8hXlr1MhfezUSVFz9THXmCH5b2eZdJlp4t2L3/exec';
-let C=null,Q=[],qi=0,nc=0,nw=0,picked=false,t0=0,tref=null,jpn=0,logs=[];
+const SUPA_URL='https://djbtfuuixptxffnotlgj.supabase.co';
+const SUPA_KEY='sb_publishable_csSa9w-AWydj2G9fo-GnIA_HSK_8Ce7';
+const db=supabase.createClient(SUPA_URL,SUPA_KEY);
+// ARENA removed — now using Supabase
+let C=null,Q=[],qi=0,nc=0,nw=0,picked=false,t0=0,tref=null,logs=[];
 
 function L(m){
   logs.push(new Date().toTimeString().slice(0,8)+' '+m);
@@ -208,62 +212,24 @@ function boot(){
   fetchQs();
 }
 
-function jsonp(url,params,ok,err){
-  const cb='_jp'+(++jpn)+'_'+Date.now();
-  const tid=setTimeout(()=>{cleanup(cb);err('15s timeout — Apps Script did not respond.\n\nFix:\n1. Paste ARENA_SCRIPT_V2.gs into your Arena Apps Script\n2. New Deployment → Web App → Execute as Me → Anyone\n3. Update ARENA constant in quiz.html');},10000);
-  window[cb]=d=>{clearTimeout(tid);cleanup(cb);L('jsonp ok, keys:'+Object.keys(d));ok(d);};
-  let qs='?callback='+cb;for(const k in params)qs+='&'+encodeURIComponent(k)+'='+encodeURIComponent(params[k]);
-  L('jsonp: '+url+qs.slice(0,100));
-  const s=document.createElement('script');s.src=url+qs;
-  s.onerror=()=>{clearTimeout(tid);cleanup(cb);err('Script load failed. Check ARENA URL.');};
-  document.head.appendChild(s);
-}
-function cleanup(cb){
-  try{delete window[cb];}catch(x){}
-  document.head.querySelectorAll('script').forEach(s=>{if(s.src&&s.src.includes(cb))s.remove();});
-}
 
-function fetchQs(){
-  const params={action:'get_questions',partId:String(C.partId||'').trim(),difficulty:String(C.difficulty||'medium').toLowerCase().trim(),count:String(parseInt(C.count)||20)};
-  jsonp(ARENA,params,
-    d=>{
-      if(d.error&&!(d.questions?.length))return fail('API error: '+d.error,'params:'+JSON.stringify(params)+'\nresponse:'+JSON.stringify(d));
-      const arr=d.questions||[];
-      if(!arr.length)return fail('0 questions for Part '+params.partId+' ('+params.difficulty+').\n\nCheck Questions sheet:\n  Column A = "Part '+params.partId+'"\n  Column I = "'+params.difficulty+'"','response: '+JSON.stringify(d));
-      Q=arr;L('got '+Q.length+' Qs');startQuiz();
-    },
-    e=>{
-      L('jsonp fail:'+e);step('Trying fetch fallback…');
-      const url=ARENA+'?action=get_questions&partId='+encodeURIComponent(params.partId)+'&difficulty='+encodeURIComponent(params.difficulty)+'&count='+encodeURIComponent(params.count);
-      fetch(url,{redirect:'follow'}).then(r=>r.text()).then(txt=>{
-        // Strip JSONP wrapper if present: callback({...}) → {...}
-        let cleaned = txt.trim();
-        if(cleaned.startsWith('/*')) cleaned = cleaned.replace(/^\/\*[\s\S]*?\*\/\s*/, '');
-        const jsonpMatch = cleaned.match(/^[\w$]+\(([\s\S]*)\)\s*;?\s*$/);
-        if(jsonpMatch) cleaned = jsonpMatch[1];
-        txt = cleaned;
-        L('fetch raw:'+txt.slice(0,150));
-        const d=JSON.parse(txt);
-        const arr=d.questions||[];
-        if(!arr.length)throw new Error('0 questions. '+txt.slice(0,200));
-        Q=arr;startQuiz();
-      }).catch(fe=>{
-          // Last resort: retry fetch once more
-          step('Retrying connection…');
-          setTimeout(()=>{
-            fetch(url).then(r=>r.text()).then(txt=>{
-              let cl=txt.trim();const m=cl.match(/^[\w$]+\(([\s\S]*)\)\s*;?\s*$/);if(m)cl=m[1];
-              try{
-                const d=JSON.parse(cl);
-                const arr=d.questions||d.data||[];
-                if(!arr.length)return fail('0 questions for Part '+params.partId+' ('+params.difficulty+').\n\nCheck Questions sheet has data for this Part and difficulty.','resp:'+JSON.stringify(d).slice(0,200));
-                startQuiz(arr);
-              }catch(pe){fail('Question load failed. Check your Apps Script is deployed correctly.','Parse error: '+pe+'\nRaw: '+cl.slice(0,200)+'\nJSONP err: '+e);}
-            }).catch(fe2=>{fail('Cannot reach the quiz server. Check your Apps Script deployment.\n\nFix: In Apps Script → Deploy → Manage Deployments → Web App → Execute as: Me, Who can access: Anyone','JSONP: '+e+'\nFetch: '+fe+'\nRetry: '+fe2+'\nURL: '+url);});
-          }, 2000);
-        });
-    }
-  );
+async function fetchQs(){
+  const partId=String(C.partId||'').trim();
+  const difficulty=String(C.difficulty||'medium').toLowerCase().trim();
+  const count=parseInt(C.count)||20;
+  L('supabase fetch: part='+partId+' diff='+difficulty+' count='+count);
+  step('Loading questions…');
+  try{
+    const {data,error}=await db.from('questions').select('*').eq('part_id',partId).eq('difficulty',difficulty).limit(count);
+    if(error)throw new Error(error.message);
+    if(!data||!data.length)return fail('0 questions for Part '+partId+' ('+difficulty+').\n\nMake sure you have run the SQL import in Supabase.','Supabase returned 0 rows for part_id='+partId+' difficulty='+difficulty);
+    Q=data.sort(()=>Math.random()-.5);
+    L('got '+Q.length+' questions');
+    startQuiz();
+  }catch(e){
+    L('supabase error: '+e);
+    fail('Could not load questions: '+e.message,'Check Supabase URL, Key, and that questions table has data.');
+  }
 }
 
 function startQuiz(){
@@ -283,7 +249,7 @@ function renderQ(){
   g('qNum').textContent='Question '+(qi+1)+' of '+tot;
   g('qBar').style.width=Math.round((qi/tot)*100)+'%';
   g('qTxt').textContent=q.question||'(missing)';
-  const ls=['A','B','C','D'],vs=[q.optionA,q.optionB,q.optionC,q.optionD];
+  const ls=['A','B','C','D'],vs=[q.option_a,q.option_b,q.option_c,q.option_d];
   g('qOpts').innerHTML=ls.map((l,i)=>{
     if(vs[i]===null||vs[i]===undefined||vs[i]==='')return '';
     return `<button class="qopt" data-l="${l}" onclick="pick(this)"><span class="olt">${l}</span><span>${xe(String(vs[i]))}</span></button>`;
@@ -296,7 +262,7 @@ window.pick=function(btn){
   if(picked)return;picked=true;
   const q=Q[qi];
   const ch=(btn.getAttribute('data-l')||'').toUpperCase();
-  const an=String(q.correctOption||q.correct_option||q.CorrectOption||'').toUpperCase().trim();
+  const an=String(q.answer||q.correctOption||q.correct_option||'').toUpperCase().trim();
   g('qOpts').querySelectorAll('.qopt').forEach(b=>{
     b.classList.add('lk');
     if(b.getAttribute('data-l')===an)b.classList.add('ok');
@@ -333,15 +299,23 @@ function finish(){
   saveResult(pct,el,tot);
 }
 
-function saveResult(pct,el,tot){
+async function saveResult(pct,el,tot){
   const sm=g('saveMsg');
   if(!C.userId){sm.textContent='⚠️ Not signed in — score not saved.';return;}
   sm.textContent='⏳ Saving score…';
-  let email='';try{email=(JSON.parse(localStorage.getItem('lexiq_user')||'{}')).email||'';}catch(x){}
-  fetch(ARENA,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({action:'save_result',userId:C.userId,userName:C.userName||'',userEmail:email,userPic:C.userPic||'',partId:C.partId,score:pct,timeTaken:el,totalQ:tot,difficulty:C.difficulty||'medium'})})
-  .then(r=>r.json()).then(d=>sm.textContent=d.success?'✅ Score saved to leaderboard!':'⚠️ '+(d.error||'Save failed'))
-  .catch(()=>sm.textContent='⚠️ Could not save score — check connection.');
+  // Random delay 0-2s to avoid concurrent submission spike
+  await new Promise(r=>setTimeout(r,Math.random()*2000));
+  try{
+    const {error}=await db.from('scores').insert({
+      user_id:C.userId, user_name:C.userName||'', user_pic:C.userPic||'',
+      part_id:C.partId, score:pct, time_taken:el, total_q:tot,
+      difficulty:C.difficulty||'medium'
+    });
+    if(error)throw new Error(error.message);
+    sm.textContent='✅ Score saved to leaderboard!';
+  }catch(e){
+    sm.textContent='⚠️ Could not save score — '+e.message;
+  }
 }
 
 window.retry=function(){hide('sRes');show('sLoad');g('timer').textContent='00:00';g('timer').className='';g('saveMsg').textContent='';step('Reloading…');fetchQs();};
