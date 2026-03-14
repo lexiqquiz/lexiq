@@ -462,13 +462,22 @@ img { max-width: 100%; display: block; }
    ========================================================= */
 #leaderboard { background: var(--surf); border-top: 1px solid var(--bdr); border-bottom: 1px solid var(--bdr); }
 
-.lb-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-.lb-tab {
-  background: var(--card); border: 1px solid var(--bdr); color: var(--tx2);
-  font-size: .76rem; font-weight: 600; padding: 7px 14px; border-radius: 4px;
-  cursor: pointer; transition: all .2s; letter-spacing: .4px;
+/* Leaderboard selector */
+.lb-selector-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.lb-selector-label { font-size: .72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tx2); white-space: nowrap; }
+.lb-select-wrap { position: relative; flex: 1; max-width: 440px; min-width: 240px; }
+.lb-select-wrap select {
+  width: 100%; appearance: none; -webkit-appearance: none;
+  background: var(--card); border: 1px solid var(--bdr2); color: var(--gold);
+  font-family: var(--sans); font-size: .88rem; font-weight: 600;
+  padding: 11px 40px 11px 16px; border-radius: var(--rad);
+  cursor: pointer; outline: none;
+  transition: border-color .2s, box-shadow .2s;
 }
-.lb-tab.active, .lb-tab:hover { background: var(--gd12); border-color: var(--bdr2); color: var(--gold); }
+.lb-select-wrap select:hover, .lb-select-wrap select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,164,74,.12); }
+.lb-select-wrap select option { background: var(--card2); color: var(--tx); }
+.lb-select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--gold); pointer-events: none; font-size: .9rem; }
+.lb-selected-label { font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--tx2); font-style: italic; }
 
 .lb-table { background: var(--card); border: 1px solid var(--bdr); border-radius: var(--rad); overflow: hidden; }
 .lb-header {
@@ -923,10 +932,46 @@ footer {
   <div class="section-inner">
     <div class="section-header center">
       <div class="eyebrow">Real-Time Rankings</div>
-      <h2 class="section-title">Live Leaderboard</h2>
+      <h2 class="section-title">Constitutional Law Leaderboard</h2>
       <p class="section-sub">Updated instantly after every quiz submission. See where you stand nationally.</p>
     </div>
-    <div class="lb-tabs" id="lb-tabs"><!-- rendered by JS --></div>
+
+    <!-- Part selector row -->
+    <div class="lb-selector-row">
+      <label class="lb-selector-label">Select Constitution Part</label>
+      <div class="lb-select-wrap">
+        <select id="lb-part-select" onchange="loadLeaderboard(this.value)">
+          <option value="I">Part I — The Union and Its Territory</option>
+          <option value="II">Part II — Citizenship</option>
+          <option value="III" selected>Part III — Fundamental Rights</option>
+          <option value="IV">Part IV — Directive Principles</option>
+          <option value="IVA">Part IVA — Fundamental Duties</option>
+          <option value="V">Part V — The Union Government</option>
+          <option value="VI">Part VI — The States</option>
+          <option value="VIII">Part VIII — Union Territories</option>
+          <option value="IX">Part IX — The Panchayats</option>
+          <option value="IXA">Part IXA — The Municipalities</option>
+          <option value="IXB">Part IXB — Co-operative Societies</option>
+          <option value="X">Part X — Scheduled &amp; Tribal Areas</option>
+          <option value="XI">Part XI — Union–State Relations</option>
+          <option value="XII">Part XII — Finance, Property, Contracts</option>
+          <option value="XIII">Part XIII — Trade &amp; Commerce</option>
+          <option value="XIV">Part XIV — Services under Union &amp; States</option>
+          <option value="XIVA">Part XIVA — Tribunals</option>
+          <option value="XV">Part XV — Elections</option>
+          <option value="XVI">Part XVI — Special Provisions</option>
+          <option value="XVII">Part XVII — Official Language</option>
+          <option value="XVIII">Part XVIII — Emergency Provisions</option>
+          <option value="XIX">Part XIX — Miscellaneous</option>
+          <option value="XX">Part XX — Amendment of the Constitution</option>
+          <option value="XXI">Part XXI — Temporary &amp; Transitional</option>
+          <option value="XXII">Part XXII — Short Title &amp; Repeals</option>
+        </select>
+        <span class="lb-select-arrow">▾</span>
+      </div>
+      <div id="lb-selected-label" class="lb-selected-label">Part III — Fundamental Rights</div>
+    </div>
+
     <div class="lb-table">
       <div class="lb-header">
         <span>Rank</span><span>Player</span><span>Time</span><span>Score</span>
@@ -1389,21 +1434,18 @@ function startQuiz() {
 // LEADERBOARD
 // ─────────────────────────────────────────────
 function buildLeaderboardTabs() {
-  const parts = ['III','V','VI','XVIII','XV','IV'];
-  const tabsEl = document.getElementById('lb-tabs');
-  if (!tabsEl) return;
-  tabsEl.innerHTML = parts.map(id =>
-    `<button class="lb-tab" data-part="${id}" onclick="loadLeaderboard('${id}')">${id === 'III' || id === 'IV' ? 'Part ' + id : 'Part ' + id}</button>`
-  ).join('');
+  // Dropdown replaces tabs — just load default part
   loadLeaderboard('III');
 }
 
 function loadLeaderboard(partId) {
   activeLbPart = partId;
-  // Update tabs
-  document.querySelectorAll('.lb-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.part === partId);
-  });
+  // Sync dropdown
+  const sel = document.getElementById('lb-part-select');
+  if (sel) sel.value = partId;
+  // Update label
+  const lbl = document.getElementById('lb-selected-label');
+  if (lbl && sel) lbl.textContent = sel.options[sel.selectedIndex]?.text || '';
   // Show loading
   document.getElementById('lb-body').innerHTML = '<div class="lb-loading"></div>';
   // Fetch from Supabase
