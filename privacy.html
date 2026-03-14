@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — LEX IQ</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2307090F'/%3E%3Crect x='1.5' y='1.5' width='61' height='61' rx='11' fill='none' stroke='%23C9A44A' stroke-width='2' opacity='.6'/%3E%3Ctext x='32' y='46' font-family='Georgia,serif' font-size='38' font-weight='700' fill='%23C9A44A' text-anchor='middle' font-style='italic'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090F;--surf:#0D1119;--card:#111827;--gold:#C9A44A;--bdr:rgba(201,164,74,.15);--bdr2:rgba(201,164,74,.38);--tx:#EDE7D4;--tx2:#9AA3B8;--tx3:#4A5568;--serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;--rad:10px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+body{font-family:var(--sans);background:var(--bg);color:var(--tx);line-height:1.7;}
+a{text-decoration:none;color:var(--gold);}
+a:hover{opacity:.8;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:99;height:60px;display:flex;align-items:center;padding:0 40px;background:rgba(7,9,15,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:1.4rem;font-weight:700;color:var(--gold);}
+.nav-emblem{width:32px;height:32px;border-radius:7px;background:rgba(201,164,74,.12);border:1.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--gold);}
+.nav-back{margin-left:auto;font-size:.8rem;color:var(--tx2);border:1px solid var(--bdr);padding:6px 16px;border-radius:20px;transition:.2s;}
+.nav-back:hover{color:var(--gold);border-color:var(--bdr2);}
+
+/* HERO */
+.page-hero{padding:64px 40px 48px;border-bottom:1px solid var(--bdr);background:var(--surf);}
+.page-hero-inner{max-width:820px;margin:0 auto;}
+.page-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.page-eyebrow::before{content:'';width:16px;height:1px;background:var(--gold);opacity:.5;}
+.page-title{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.2rem);font-weight:700;color:var(--tx);margin-bottom:12px;letter-spacing:-1px;}
+.page-meta{font-size:.82rem;color:var(--tx3);display:flex;gap:20px;flex-wrap:wrap;}
+.page-meta span{display:flex;align-items:center;gap:6px;}
+
+/* CONTENT */
+.page-content{max-width:820px;margin:0 auto;padding:56px 40px 80px;}
+.section-block{margin-bottom:48px;}
+.section-block h2{font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--tx);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;}
+.section-block h2 .num{font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:2px;color:var(--gold);background:rgba(201,164,74,.1);border:1px solid var(--bdr2);padding:2px 8px;border-radius:4px;}
+.section-block p{font-size:.92rem;color:var(--tx2);line-height:1.85;margin-bottom:14px;}
+.section-block ul{list-style:none;margin:12px 0 14px;}
+.section-block ul li{font-size:.9rem;color:var(--tx2);line-height:1.75;padding:6px 0 6px 20px;position:relative;border-bottom:1px solid rgba(255,255,255,.03);}
+.section-block ul li::before{content:'⚖';position:absolute;left:0;font-size:.7rem;top:8px;}
+.section-block ul li:last-child{border-bottom:none;}
+.highlight-box{background:var(--card);border:1px solid var(--bdr);border-left:3px solid var(--gold);border-radius:0 var(--rad) var(--rad) 0;padding:16px 20px;margin:16px 0;}
+.highlight-box p{margin:0;font-size:.88rem;}
+.contact-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rad);padding:24px;display:flex;align-items:center;gap:16px;margin-top:8px;}
+.contact-icon{width:44px;height:44px;border-radius:10px;background:rgba(201,164,74,.1);border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.contact-label{font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:4px;}
+.contact-val{font-size:.9rem;color:var(--gold);font-weight:600;}
+
+/* FOOTER */
+.page-footer{border-top:1px solid var(--bdr);padding:28px 40px;text-align:center;background:var(--surf);}
+.page-footer p{font-size:.75rem;color:var(--tx3);}
+.page-footer a{color:var(--gold);}
+.page-links{display:flex;justify-content:center;gap:24px;margin-top:12px;flex-wrap:wrap;}
+.page-links a{font-size:.78rem;color:var(--tx2);transition:.2s;}
+.page-links a:hover{color:var(--gold);}
+
+@media(max-width:600px){nav{padding:0 18px;}.page-hero,.page-content{padding-left:20px;padding-right:20px;}.page-footer{padding:22px 20px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-emblem">L</div>LEX IQ
+  </a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-eyebrow">Legal Document</div>
+    <h1 class="page-title">Privacy Policy</h1>
+    <div class="page-meta">
+      <span>📅 Effective: March 2026</span>
+      <span>📍 Applicable to lexiqquiz.github.io/lexiq</span>
+    </div>
+  </div>
+</div>
+
+<div class="page-content">
+
+  <div class="section-block">
+    <p>LEX IQ ("we", "our", "the platform") is committed to protecting your privacy. This policy explains what information we collect, how we use it, and your rights regarding your data. By using LEX IQ, you agree to the practices described here.</p>
+    <div class="highlight-box">
+      <p>📌 We only collect what is necessary to provide the quiz experience. We do not sell your data to anyone.</p>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">01</span> Information We Collect</h2>
+    <p>When you sign in with Google, we receive and store:</p>
+    <ul>
+      <li>Your full name and email address — used to identify your account</li>
+      <li>Your Google profile picture — displayed on the leaderboard and your profile</li>
+      <li>Your Google User ID — used as a unique account identifier</li>
+    </ul>
+    <p>When you take a quiz, we record:</p>
+    <ul>
+      <li>Your score, time taken, and difficulty level for each quiz attempt</li>
+      <li>The Constitution Part you attempted</li>
+      <li>Timestamp of submission</li>
+    </ul>
+    <p>We do not collect passwords, phone numbers, location data, or payment information.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">02</span> How We Use Your Information</h2>
+    <ul>
+      <li>To display your name and picture on the live leaderboard (if you have enabled this)</li>
+      <li>To show you your own quiz history, scores, and performance analytics</li>
+      <li>To calculate your average score and best rank in your profile</li>
+      <li>To maintain your session across devices via localStorage</li>
+      <li>To improve quiz quality and identify which sections need more questions</li>
+    </ul>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">03</span> Data Storage & Security</h2>
+    <p>Your data is stored in Supabase, a secure PostgreSQL database hosted on AWS infrastructure in the Asia-Pacific (Singapore) region. All data transmission is encrypted via HTTPS/TLS.</p>
+    <p>Row Level Security (RLS) is enabled on all database tables, meaning your data is protected by database-level access rules — not just application-level logic.</p>
+    <div class="highlight-box">
+      <p>🔒 We never store your Google password. Authentication is handled entirely by Google's secure OAuth 2.0 system.</p>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">04</span> Third-Party Services</h2>
+    <p>LEX IQ uses the following third-party services. Each has its own privacy policy:</p>
+    <ul>
+      <li><strong style="color:var(--tx)">Google Sign-In (OAuth 2.0)</strong> — for authentication only</li>
+      <li><strong style="color:var(--tx)">Supabase</strong> — database for scores, users, and questions</li>
+      <li><strong style="color:var(--tx)">Firebase Realtime Database</strong> — for live room functionality only</li>
+      <li><strong style="color:var(--tx)">GitHub Pages</strong> — for hosting the static website</li>
+      <li><strong style="color:var(--tx)">Google Fonts</strong> — for typography (no personal data shared)</li>
+    </ul>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">05</span> Your Privacy Controls</h2>
+    <p>You have full control over your data. From your Profile (click your avatar after signing in) you can:</p>
+    <ul>
+      <li>Toggle whether your name appears on the public leaderboard</li>
+      <li>Enable or disable quiz history saving</li>
+      <li>Toggle analytics tracking</li>
+      <li>Permanently delete your account and all associated data</li>
+    </ul>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">06</span> Cookies & Local Storage</h2>
+    <p>We do not use tracking cookies. We use your browser's localStorage solely to maintain your login session across page refreshes — this data never leaves your device except during explicit API calls.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">07</span> Children's Privacy</h2>
+    <p>LEX IQ is intended for users aged 16 and above. We do not knowingly collect personal data from children under 16. If you believe a minor has created an account, please contact us and we will delete it promptly.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">08</span> Changes to This Policy</h2>
+    <p>We may update this Privacy Policy as the platform grows. We will update the effective date at the top of this page. Continued use of the platform after changes constitutes acceptance of the updated policy.</p>
+  </div>
+
+  <div class="section-block">
+    <h2><span class="num">09</span> Contact Us</h2>
+    <p>For any privacy-related questions or data deletion requests:</p>
+    <div class="contact-card">
+      <div class="contact-icon">📧</div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-val">lexiqquiz@gmail.com</div>
+      </div>
+    </div>
+    <div class="contact-card" style="margin-top:12px;">
+      <div class="contact-icon">📸</div>
+      <div>
+        <div class="contact-label">Instagram</div>
+        <div class="contact-val">@lexiqquiz</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="page-footer">
+  <p>© 2026 LEX IQ · For educational purposes only</p>
+  <div class="page-links">
+    <a href="index.html">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

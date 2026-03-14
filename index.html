@@ -566,7 +566,7 @@ footer {
   padding: 56px 40px 28px;
 }
 .footer-inner { max-width: 1200px; margin: 0 auto; }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 40px; }
 .footer-brand-logo { display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 1.45rem; font-weight: 700; color: var(--gold); margin-bottom: 14px; }
 .footer-about { font-size: .82rem; color: var(--tx2); line-height: 1.82; max-width: 280px; margin-bottom: 18px; }
 .footer-social { display: flex; gap: 8px; }
@@ -585,7 +585,7 @@ footer {
 .footer-bottom { padding-top: 22px; border-top: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .footer-copy { font-size: .72rem; color: var(--tx2); opacity: .65; }
 
-@media (max-width: 800px) { .footer-top { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1/-1; } }
+@media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; } .footer-brand { grid-column: 1/-1; } }
 @media (max-width: 520px) { .footer-top { grid-template-columns: 1fr; } footer { padding: 44px 20px 22px; } .section { padding: 72px 20px; } }
 
 /* =========================================================
@@ -1091,10 +1091,26 @@ footer {
           <li><a href="javascript:void(0)" onclick="openSignin()">Sign In</a></li>
         </ul>
       </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="disclaimer.html">Disclaimer</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
     </div>
     <div class="footer-bottom">
       <p class="footer-copy">© 2026 LEX IQ · For educational purposes only · Constitutional provisions sourced from official Government of India publications.</p>
-      <p class="footer-copy">Made with ❤ for India's legal community</p>
+      <p class="footer-copy">
+        <a href="privacy.html" style="color:var(--tx2);opacity:.65;transition:color .2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--tx2)'">Privacy</a> ·
+        <a href="terms.html" style="color:var(--tx2);opacity:.65;transition:color .2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--tx2)'">Terms</a> ·
+        <a href="disclaimer.html" style="color:var(--tx2);opacity:.65;transition:color .2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--tx2)'">Disclaimer</a> ·
+        <a href="about.html" style="color:var(--tx2);opacity:.65;transition:color .2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--tx2)'">About</a> ·
+        Made with ❤ for India's legal community
+      </p>
     </div>
   </div>
 </footer>
